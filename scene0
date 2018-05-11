@@ -1,0 +1,32 @@
+# shadows and glare are disabled by default;
+# only printable-symbols and space-symbols are allowed;
+# heed your semicolons! ;
+# heed your semicolons really carefully! ;
+
+camera:
+	position {0.0, 0.0, 0.0}
+	angles {0.0, 0.0, 0.0};
+shadow: on;
+glare: on;
+#glare: ;
+#glare: on;
+#glare: on;
+light: ambient
+	intensivity 0.2;
+light: point
+	intensivity 0.6
+	position {0, 0, 0};
+
+light: directional
+	intesivity 0.2
+	direction {0, 0, 0};
+object: sphere
+	center {0, 0, 0}
+	radius 5
+	color {255, 255, 255}
+	specularity 100;
+object: plane
+	point {0, 0, 0}
+	normal {0, 0, 0}
+	color {255, 255, 255}
+	specularity 100;
