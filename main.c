@@ -104,8 +104,8 @@ int	main(int ac, char **av)
 
 
 
-		if (graphic_window(&rtv) != 0)
-			return (-1);
+		// if (graphic_window(&rtv) != 0)
+		// 	return (-1);
 		write(1, "-----------------------graphic_window---------------------", 60);
 	}
 	else

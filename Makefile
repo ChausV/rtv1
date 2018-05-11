@@ -16,12 +16,13 @@ FLAGS = -Wall -Wextra -Werror
 SRC = main.c \
 	errors.c \
 	base_struct.c \
-	get_scene.c \
+	scene_get_scene.c \
+	scene_str_lst_functions.c \
 	scene_parse.c \
-	scene_parse_parse.c \
-	parse_camera.c \
-	parse_point.c \
-	str_lst_functions.c \
+	scene_parse_elements.c \
+	scene_parse_camera.c \
+	scene_parse_point.c \
+	scene_parse_light.c \
 	graphic_window.c \
 	graphic_functions.c \
 	tracer_funcs.c \
