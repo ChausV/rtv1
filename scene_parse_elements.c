@@ -78,15 +78,15 @@ int		parse_shadow(t_rtv *rtv, char *str)
 	return (0);
 }
 
-int		scene_parse_elems_differ(t_rtv *rtv, t_strlst *elem)
+int		scene_parse_el_diff(t_rtv *rtv, t_strlst *elem, int *l_curr, int *o_curr)
 {
 	if (elem->type == 'o')
 	{
-		;
+		o_curr += 1;
 	}
 	if (elem->type == 'l')
 	{
-		;
+		return (parse_light(rtv, elem->str, l_curr) ? -1 : 0);
 	}
 	if (elem->type == 'c')
 	{
@@ -106,11 +106,15 @@ int		scene_parse_elems_differ(t_rtv *rtv, t_strlst *elem)
 int		scene_parse_elems(t_rtv *rtv)
 {
 	t_strlst	*iter;
+	int			light_curr;
+	int			object_curr;
 
+	light_curr = 0;
+	object_curr = 0;
 	iter = rtv->inplst;
 	while(iter)
 	{
-		if (scene_parse_elems_differ(rtv, iter) != 0)
+		if (scene_parse_el_diff(rtv, iter, &light_curr, &object_curr) != 0)
 		{
 			//	?
 			return (-1);

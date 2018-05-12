@@ -37,7 +37,7 @@ void	rtv_init(t_rtv *rtv)
 	rtv->shadow = 0;
 	rtv->glare = 0;
 
-	// rtv->objects = NULL;
-	// rtv->lights = NULL;
+	rtv->objects = NULL;
+	rtv->lights = NULL;
 	// rtv->mlx = NULL;
 }

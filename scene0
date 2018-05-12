@@ -12,7 +12,7 @@ glare: on;
 #glare: on;
 #glare: on;
 light: ambient
-	intensivity 0.2;
+	intensivity 0.2 ;
 light: point
 	intensivity 0.6
 	position {0, 0, 0};

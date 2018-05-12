@@ -138,10 +138,15 @@ struct	s_rtv
 void		rtv_init(t_rtv *rtv);
 int			get_scene(char *file, t_rtv *rtv);
 int			scene_parse(t_rtv *rtv);
+int			scene_memory_alloc(t_rtv *rtv);
+void		scene_memory_free(t_rtv *rtv);
 int			scene_parse_elems(t_rtv *rtv);
+int			word_equ(char *str, int *i, char *word);
+int			parse_double(char *str, int *i, double *res);
 int			parse_camera(t_rtv *rtv, char *str);
 int			parse_point(char *str, int *i, t_point *point);
 int			parse_angles(char *str, int *i, double *angles);
+int			parse_light(t_rtv *rtv, char *str, int *curr);
 
 void		skip_space_symbols(char *str, int *iter);
 void		skip_nonspace_symbols(char *str, int *iter);

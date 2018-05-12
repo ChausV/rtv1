@@ -25,7 +25,7 @@ int	main(int ac, char **av)
 		}
 		if (scene_parse(&rtv) != 0)
 		{
-			//	free strlst
+			del_str_lst(&rtv.inplst);
 			return (-1);
 		}
 
@@ -54,7 +54,10 @@ int	main(int ac, char **av)
 		// del_str_lst(&rtv.inplst);
 		// system("leaks RTv1");
 
-
+		// rtv.objects = NULL;
+		// rtv.lights = NULL;
+		// scene_memory_free(&rtv);
+		// system("leaks RTv1");
 
 
 		rtv.num_obj = 11;

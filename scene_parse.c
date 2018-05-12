@@ -131,7 +131,12 @@ int		scene_parse(t_rtv *rtv)
 		return (-1);
 	if (scene_num_elems_validation(rtv) != 0)
 		return (-1);
-	if (scene_parse_elems(rtv) != 0)
+	if (scene_memory_alloc(rtv) != 0)
 		return (-1);
+	if (scene_parse_elems(rtv) != 0)
+	{
+		// free obj
+		return (-1);
+	}
 	return (0);
 }

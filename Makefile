@@ -19,6 +19,7 @@ SRC = main.c \
 	scene_get_scene.c \
 	scene_str_lst_functions.c \
 	scene_parse.c \
+	scene_obj_memory.c \
 	scene_parse_elements.c \
 	scene_parse_camera.c \
 	scene_parse_point.c \
