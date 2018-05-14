@@ -191,31 +191,37 @@ void	throw_rays(t_rtv *rtv)
 	double y_step;
 	double x_step;
 
-	y_step = 2.0 / 800.0;
-	x_step = 2.0 / 800.0;
-	y = -1.0 + y_step / 2.0;
+	y_step = 1.5 / (double)IMG_HEIGHT;
+	x_step = 2.0 / (double)IMG_WIDTH;
+	// printf("__%f__%f__\n", x_step, y_step);
+	y = -0.75 + y_step / 2.0;
 	x = -1.0 + x_step / 2.0;
 
-	while(y < 1.0)
+	while(y < 0.75)
 	{
 		while(x < 1.0)
 		{
 			ray_dir.x = x;
 			ray_dir.y = y;
-			ray_dir.z = 1.0;
+			ray_dir.z = 2.0;
 
 			ray_dir = rotate_cam_ray(rtv->cam_tri, &ray_dir);
 
-			if ((color = tracer(&ray_dir, rtv)) != -1)
-			{
-				mlx_pixel_put(rtv->mlx[0], rtv->mlx[1], x * 400 + 450, y * 400 + 450, color);
-			}
-			else
-			{
-				mlx_pixel_put(rtv->mlx[0], rtv->mlx[1], x * 400 + 450, y * 400 + 450, rgb((t_color){100, 100, 100}));
-			}
+			if ((color = tracer(&ray_dir, rtv)) == -1)
+				color = rgb((t_color){100, 100, 100});
+
+			// mlx_pixel_put(rtv->mlx[0], rtv->mlx[1],
+			// 									x * ((int)(IMG_WIDTH / 2)) + 450,
+			// 									y * ((int)(IMG_HEIGHT / 2)) + 450,
+			// 									color);
+			mlx_pixel_put(rtv->mlx[0], rtv->mlx[1],
+												x * 400 + 450,
+												y * 400 + 450,
+												color);
+
 			x += x_step;
 		}
+		// printf("__%f__\n", x);
 		x = -1.0 + x_step / 2.0;
 		y += y_step;
 	}
@@ -225,8 +231,14 @@ int		graphic_window(t_rtv *rtv)
 {
 	void	*mlx_arr[2];
 
-	mlx_arr[0] = mlx_init();
-	mlx_arr[1] = mlx_new_window(mlx_arr[0], WIN_WIDTH, WIN_HEIGHT, "some_name");
+	if (!(mlx_arr[0] = mlx_init()))
+	{
+		return (-1);
+	}
+	if (!(mlx_arr[1] = mlx_new_window(mlx_arr[0], WIN_WIDTH, WIN_HEIGHT, "some_name")))
+	{
+		return (-1);
+	}
 	rtv->mlx = mlx_arr;
 	
 

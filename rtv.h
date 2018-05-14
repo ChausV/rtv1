@@ -58,8 +58,14 @@
 # define FIRST_WORD_LENGTH 15
 # define SHORT_WORD_LENGTH 10
 
-# define WIN_WIDTH 1000
+# define WIN_WIDTH 1500
 # define WIN_HEIGHT 1000
+
+# define IMG_WIDTH 800
+# define IMG_HEIGHT 600
+# define HALF_FRAME_H 600
+# define HALF_FRAME_W 600
+# define FRAME_DISTANCE 600
 
 typedef struct s_strlst	t_strlst;
 
