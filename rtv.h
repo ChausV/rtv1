@@ -143,10 +143,16 @@ void		scene_memory_free(t_rtv *rtv);
 int			scene_parse_elems(t_rtv *rtv);
 int			word_equ(char *str, int *i, char *word);
 int			parse_double(char *str, int *i, double *res);
+int			parse_integer(char *str, int *i, int *target);
 int			parse_camera(t_rtv *rtv, char *str);
 int			parse_point(char *str, int *i, t_point *point);
+int			parse_vector(char *str, int *i, t_vector *vector);
 int			parse_angles(char *str, int *i, double *angles);
+int			parse_color(char *str, int *i, t_color *target);
+int			parse_specularity(char *str, int *i, int *specul);
 int			parse_light(t_rtv *rtv, char *str, int *curr);
+int			parse_object(t_rtv *rtv, char *str, int *curr);
+int			parse_obj_sphere(char *str, t_rtv *rtv, int *curr);
 
 void		skip_space_symbols(char *str, int *iter);
 void		skip_nonspace_symbols(char *str, int *iter);

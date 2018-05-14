@@ -19,9 +19,9 @@ void	get_first_word(char *str, char **word)
 
 	i = 0;
 	j = 0;
-	while(ft_isspace(str[i]))
+	while (ft_isspace(str[i]))
 		i++;
-	while(!ft_isspace(str[i]) && str[i] && j < FIRST_WORD_LENGTH - 1)
+	while (!ft_isspace(str[i]) && str[i] && j < FIRST_WORD_LENGTH - 1)
 	{
 		(*word)[j] = str[i];
 		i++;
@@ -62,7 +62,7 @@ int		after_semicolon_check(char *str)
 	i = 0;
 	str = ft_strchr(str, ';');
 	str++;
-	while(ft_isspace(str[i]))
+	while (ft_isspace(str[i]))
 		i++;
 	if (str[i] != '\0')
 		return (error_str_int("scene error: semicolon in element description"));
@@ -75,7 +75,7 @@ int		scene_symbol_check(char *str)
 	int		i;
 
 	i = 0;
-	while(str[i])
+	while (str[i])
 	{
 		if (!ft_isascii(str[i]))
 			return (error_str_int("scene error: non-ascii symbol found"));
@@ -94,7 +94,7 @@ int		scene_count_and_validation(t_rtv *rtv)
 
 	wrd = word;
 	iter = rtv->inplst;
-	while(iter)
+	while (iter)
 	{
 		if (scene_symbol_check(iter->str) != 0)
 			return (-1);
@@ -125,6 +125,19 @@ int		scene_num_elems_validation(t_rtv *rtv)
 	return (0);
 }
 
+void	overall_light_intensivity_verification(t_light **lights, int num)
+{
+	float	all;
+
+	all = 0.0F;
+	while (--num >= 0)
+	{
+		all += lights[num]->intens;
+	}
+	if (all > 1.0F)
+		error_str_int("scene warning: overall lights intensivity warning");
+}
+
 int		scene_parse(t_rtv *rtv)
 {
 	if (scene_count_and_validation(rtv) != 0)
@@ -135,8 +148,9 @@ int		scene_parse(t_rtv *rtv)
 		return (-1);
 	if (scene_parse_elems(rtv) != 0)
 	{
-		// free obj
+		scene_memory_free(rtv);
 		return (-1);
 	}
+	overall_light_intensivity_verification(rtv->lights, rtv->num_lig);
 	return (0);
 }

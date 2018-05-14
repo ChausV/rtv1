@@ -17,7 +17,7 @@ int		word_equ(char *str, int *i, char *word)
 	int		j;
 
 	j = 0;
-	while(!ft_isspace(str[j]) && str[j] != ';' && str[j] != '{')
+	while (!ft_isspace(str[j]) && str[j] != ';' && str[j] != '{')
 	{
 		if (str[j] != word[j] || word[j] == '\0')
 			return (-1);

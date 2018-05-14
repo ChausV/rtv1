@@ -44,11 +44,7 @@ int		objects_memory_init(t_rtv *rtv)
 			scene_memory_free(rtv);
 			return (error_perror_int("ft_memalloc() error"));
 		}
-		//
-		//
 		//	attributes initialiization;
-		//
-		//
 		i++;
 	}
 	return (0);
@@ -66,12 +62,7 @@ int		lights_memory_init(t_rtv *rtv)
 			scene_memory_free(rtv);
 			return (error_perror_int("ft_memalloc() error"));
 		}
-		// rtv->lights[i]->intens = 0.0;
-		//
-		//
 		//	attributes initialiization;
-		//
-		//
 		i++;
 	}
 	return (0);
@@ -81,9 +72,11 @@ int		scene_memory_alloc(t_rtv *rtv)
 {
 	int		i;
 
-	if (!(rtv->objects = (t_object**)ft_memalloc(sizeof(t_object*) * rtv->num_obj)))
+	if (!(rtv->objects = (t_object**)ft_memalloc(sizeof(t_object*)
+															* rtv->num_obj)))
 		return (error_perror_int("ft_memalloc() error"));
-	if (!(rtv->lights = (t_light**)ft_memalloc(sizeof(t_light*) * rtv->num_lig)))
+	if (!(rtv->lights = (t_light**)ft_memalloc(sizeof(t_light*)
+															* rtv->num_lig)))
 	{
 		ft_memdel((void**)rtv->objects);
 		return (error_perror_int("ft_memalloc() error"));

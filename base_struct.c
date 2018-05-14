@@ -21,12 +21,12 @@ void	rtv_init(t_rtv *rtv)
 	rtv->num_gla = 0;
 	rtv->num_sha = 0;
 
-	rtv->cam_pos.x = 0.0;
-	rtv->cam_pos.y = 0.0;
-	rtv->cam_pos.z = 0.0;
-	rtv->cam_ang[0] = 0.0;
-	rtv->cam_ang[1] = 0.0;
-	rtv->cam_ang[2] = 0.0;
+	// rtv->cam_pos.x = 0.0;
+	// rtv->cam_pos.y = 0.0;
+	// rtv->cam_pos.z = 0.0;
+	// rtv->cam_ang[0] = 0.0;
+	// rtv->cam_ang[1] = 0.0;
+	// rtv->cam_ang[2] = 0.0;
 	// rtv->cam_tri[0] = 0.0;
 	// rtv->cam_tri[1] = 0.0;
 	// rtv->cam_tri[2] = 0.0;

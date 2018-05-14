@@ -23,7 +23,10 @@ SRC = main.c \
 	scene_parse_elements.c \
 	scene_parse_camera.c \
 	scene_parse_point.c \
+	scene_parse_color.c \
 	scene_parse_light.c \
+	scene_parse_object.c \
+	scene_parse_sphere.c \
 	graphic_window.c \
 	graphic_functions.c \
 	tracer_funcs.c \

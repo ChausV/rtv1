@@ -64,7 +64,7 @@ int			get_scene(char *file, t_rtv *rtv)
 
 	if ((fd = open(file, O_RDONLY)) == -1)
 		return (error_perror_int("open() error"));
-	while((gnl_ret = get_next_line(fd, &line)) > 0)
+	while ((gnl_ret = get_next_line(fd, &line)) > 0)
 	{
 		if (str_to_input_list(line, rtv) != 0)
 		{

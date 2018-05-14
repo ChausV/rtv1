@@ -12,7 +12,7 @@
 
 #include "rtv.h"
 
-t_strlst	*new_str_lst_node()
+t_strlst	*new_str_lst_node(void)
 {
 	t_strlst	*elem;
 
@@ -42,7 +42,7 @@ void		del_str_lst(t_strlst **root)
 	t_strlst	*temp;
 
 	iter = *root;
-	while(iter)
+	while (iter)
 	{
 		temp = iter->next;
 		free(iter->str);

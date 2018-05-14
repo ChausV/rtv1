@@ -14,13 +14,13 @@
 
 void	skip_space_symbols(char *str, int *iter)
 {
-	while(ft_isspace(str[*iter]))
+	while (ft_isspace(str[*iter]))
 		(*iter)++;
 }
 
 void	skip_nonspace_symbols(char *str, int *iter)
 {
-	while(!ft_isspace(str[*iter]))
+	while (!ft_isspace(str[*iter]))
 		(*iter)++;
 }
 
@@ -35,7 +35,7 @@ int		parse_glare(t_rtv *rtv, char *str)
 	skip_space_symbols(str, &i);
 	skip_nonspace_symbols(str, &i);
 	skip_space_symbols(str, &i);
-	while(!ft_isspace(str[i]) && str[i] != ';' && j < SHORT_WORD_LENGTH -1)
+	while (!ft_isspace(str[i]) && str[i] != ';' && j < SHORT_WORD_LENGTH - 1)
 		buff[j++] = str[i++];
 	buff[j] = '\0';
 	// ft_putendl(buff);	//=========================
@@ -62,7 +62,7 @@ int		parse_shadow(t_rtv *rtv, char *str)
 	skip_space_symbols(str, &i);
 	skip_nonspace_symbols(str, &i);
 	skip_space_symbols(str, &i);
-	while(!ft_isspace(str[i]) && str[i] != ';' && j < SHORT_WORD_LENGTH -1)
+	while (!ft_isspace(str[i]) && str[i] != ';' && j < SHORT_WORD_LENGTH - 1)
 		buff[j++] = str[i++];
 	buff[j] = '\0';
 	// ft_putendl(buff);	//=========================
@@ -82,7 +82,7 @@ int		scene_parse_el_diff(t_rtv *rtv, t_strlst *elem, int *l_curr, int *o_curr)
 {
 	if (elem->type == 'o')
 	{
-		o_curr += 1;
+		return (parse_object(rtv, elem->str, o_curr) ? -1 : 0);
 	}
 	if (elem->type == 'l')
 	{
@@ -112,11 +112,10 @@ int		scene_parse_elems(t_rtv *rtv)
 	light_curr = 0;
 	object_curr = 0;
 	iter = rtv->inplst;
-	while(iter)
+	while (iter)
 	{
 		if (scene_parse_el_diff(rtv, iter, &light_curr, &object_curr) != 0)
 		{
-			//	?
 			return (-1);
 		}
 		iter = iter->next;
