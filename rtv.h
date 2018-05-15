@@ -63,9 +63,9 @@
 
 # define IMG_WIDTH 800
 # define IMG_HEIGHT 600
-# define HALF_FRAME_H 600
-# define HALF_FRAME_W 600
-# define FRAME_DISTANCE 600
+# define FRAME_WIDTH 2.0
+// # define FRAME_HEIGHT
+# define FRAME_DISTANCE 2.0
 
 typedef struct s_strlst	t_strlst;
 
@@ -139,6 +139,15 @@ struct	s_rtv
 	t_light		**lights;
 
 	void		**mlx;
+
+	double		frame_h;
+	double		half_frame_w;
+	double		half_frame_h;
+	double		step;
+
+	char		*img;
+
+	int			bg_color;
 };
 
 void		rtv_init(t_rtv *rtv);

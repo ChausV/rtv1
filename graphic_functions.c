@@ -32,6 +32,7 @@ int		key_hook(int keycode, t_rtv *rtv)
 		rtv->cam_pos.z += 0.2;
 
 		throw_rays(rtv);
+		mlx_put_image_to_window(rtv->mlx[0], rtv->mlx[1], rtv->mlx[2], 20, 20);
 	}
 	if (keycode == 125)
 	{
@@ -42,6 +43,7 @@ int		key_hook(int keycode, t_rtv *rtv)
 		rtv->cam_pos.z -= 0.2;
 
 		throw_rays(rtv);
+		mlx_put_image_to_window(rtv->mlx[0], rtv->mlx[1], rtv->mlx[2], 20, 20);
 	}
 	if (keycode == 123)
 	{
@@ -52,6 +54,7 @@ int		key_hook(int keycode, t_rtv *rtv)
 		rtv->cam_pos.z += 0.3;
 
 		throw_rays(rtv);
+		mlx_put_image_to_window(rtv->mlx[0], rtv->mlx[1], rtv->mlx[2], 20, 20);
 	}
 	if (keycode == 124)
 	{
@@ -62,6 +65,7 @@ int		key_hook(int keycode, t_rtv *rtv)
 		rtv->cam_pos.z -= 0.3;
 
 		throw_rays(rtv);
+		mlx_put_image_to_window(rtv->mlx[0], rtv->mlx[1], rtv->mlx[2], 20, 20);
 	}
 	return (0);
 }

@@ -4,7 +4,7 @@
 # heed your semicolons really carefully! ;
 
 camera:
-	position {0.0, 0.0, -2.0}
+	position {0.0, 0.0, -10.0}
 	angles {0.0, 0.0, 0.0};
 
 shadow: on;

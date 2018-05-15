@@ -184,52 +184,42 @@ float	reflection(t_point *p, t_vector *n, t_vector v, int obj, t_rtv *rtv)
 void	throw_rays(t_rtv *rtv)
 {
 	t_vector ray_dir;
-	
 	int color;
 	double y;
 	double x;
-	double y_step;
-	double x_step;
 
-	y_step = 1.5 / (double)IMG_HEIGHT;
-	x_step = 2.0 / (double)IMG_WIDTH;
-	// printf("__%f__%f__\n", x_step, y_step);
-	y = -0.75 + y_step / 2.0;
-	x = -1.0 + x_step / 2.0;
+	char *image;
+	image = rtv->img;
 
-	while(y < 0.75)
+	y = (-rtv->frame_h + rtv->step) / 2.0;
+	x = (-(double)FRAME_WIDTH + rtv->step) / 2.0;
+
+	while(y < rtv->half_frame_h)
 	{
-		while(x < 1.0)
+		while(x < rtv->half_frame_w)
 		{
 			ray_dir.x = x;
 			ray_dir.y = y;
-			ray_dir.z = 2.0;
+			ray_dir.z = FRAME_DISTANCE;
 
 			ray_dir = rotate_cam_ray(rtv->cam_tri, &ray_dir);
 
 			if ((color = tracer(&ray_dir, rtv)) == -1)
-				color = rgb((t_color){100, 100, 100});
+				color = rtv->bg_color;
 
-			// mlx_pixel_put(rtv->mlx[0], rtv->mlx[1],
-			// 									x * ((int)(IMG_WIDTH / 2)) + 450,
-			// 									y * ((int)(IMG_HEIGHT / 2)) + 450,
-			// 									color);
-			mlx_pixel_put(rtv->mlx[0], rtv->mlx[1],
-												x * 400 + 450,
-												y * 400 + 450,
-												color);
+			ft_memcpy(image, &color, 4);
 
-			x += x_step;
+			x += rtv->step;
+			image += 4;
 		}
-		// printf("__%f__\n", x);
-		x = -1.0 + x_step / 2.0;
-		y += y_step;
+		x = (-(double)FRAME_WIDTH + rtv->step) / 2.0;
+		y += rtv->step;
 	}
 }
 
 int		graphic_window(t_rtv *rtv)
 {
-	void	*mlx_arr[2];
+	void	*mlx_arr[3];
 
 	if (!(mlx_arr[0] = mlx_init()))
 	{
@@ -239,14 +229,30 @@ int		graphic_window(t_rtv *rtv)
 	{
 		return (-1);
 	}
+	if (!(mlx_arr[2] = mlx_new_image(mlx_arr[0], IMG_WIDTH, IMG_HEIGHT)))
+	{
+		return (-1);
+	}
 	rtv->mlx = mlx_arr;
 	
+	int		bits_per_pixel;
+	int		size_line;
+	int		endian;
+	bits_per_pixel = 4;							//	WTF ???
+	size_line = IMG_WIDTH * bits_per_pixel;		//	WTF ???
+	endian = 1;									//	WTF ???
+	rtv->img = mlx_get_data_addr(mlx_arr[2], &bits_per_pixel, &size_line, &endian);
+
 
 
 	throw_rays(rtv);
 
-	mlx_key_hook(mlx_arr[1], key_hook, rtv);
-	mlx_hook(mlx_arr[1], 17, 1L << 17, close_win, NULL);
+
+	mlx_put_image_to_window(mlx_arr[0], mlx_arr[1], mlx_arr[2], 20, 20);
+
+
+	mlx_hook(mlx_arr[1], 2, 5, key_hook, rtv);
+	mlx_hook(mlx_arr[1], 17, 1L << 17, close_win, NULL); //free
 	mlx_loop(mlx_arr[0]);
 	return (0);
 }

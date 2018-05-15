@@ -40,4 +40,13 @@ void	rtv_init(t_rtv *rtv)
 	rtv->objects = NULL;
 	rtv->lights = NULL;
 	// rtv->mlx = NULL;
+
+	rtv->frame_h = ((double)IMG_HEIGHT / (double)IMG_WIDTH) * FRAME_WIDTH;
+	rtv->half_frame_w = FRAME_WIDTH / 2.0;
+	rtv->half_frame_h = rtv->frame_h / 2.0;
+	rtv->step = FRAME_WIDTH / (double)IMG_WIDTH;
+
+	rtv->bg_color = rgb((t_color){100, 100, 100});
+	// printf("__%f__\n", rtv->frame_h);
+	// printf("step__%f__\n", rtv->step);
 }
