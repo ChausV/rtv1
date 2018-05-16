@@ -40,5 +40,5 @@ void	usage_error(const char *name)
 {
 	ft_putstr_fd("usage: ", 2);
 	ft_putstr_fd(name, 2);
-	ft_putendl_fd(" scene", 2);
+	ft_putendl_fd(" scene_file", 2);
 }

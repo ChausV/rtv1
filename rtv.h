@@ -55,6 +55,11 @@
 */
 # include "libft.h"
 
+/*
+**	thread functions
+*/
+# include "pthread.h"
+
 # define FIRST_WORD_LENGTH 15
 # define SHORT_WORD_LENGTH 10
 
@@ -67,6 +72,8 @@
 // # define FRAME_HEIGHT
 # define FRAME_DISTANCE 2.0
 
+# define THR_NUM 20
+
 typedef struct s_strlst	t_strlst;
 
 typedef struct s_vector	t_vector;
@@ -76,6 +83,7 @@ typedef struct s_object	t_object;
 typedef struct s_light	t_light;
 
 typedef struct s_rtv	t_rtv;
+typedef struct s_thread	t_thread;
 
 struct	s_strlst
 {
@@ -138,16 +146,27 @@ struct	s_rtv
 	t_object	**objects;
 	t_light		**lights;
 
-	void		**mlx;
+	void		*mlx[3];
 
 	double		frame_h;
 	double		half_frame_w;
 	double		half_frame_h;
 	double		step;
 
+	double		x_start;
+	double		y_start;
+	int			lines_per_thr;
+
 	char		*img;
 
 	int			bg_color;
+};
+struct		s_thread
+{
+	t_rtv	*rtv;
+	double	y_start;
+	double	y_end;
+	char	*image;
 };
 
 void		rtv_init(t_rtv *rtv);
@@ -179,9 +198,10 @@ void		del_str_lst(t_strlst **root);
 int			graphic_window();
 
 int			tracer(t_vector *ray_dir, t_rtv *rtv);
-void		throw_rays(t_rtv *rtv);
+void		*throw_rays(void *arg);
+void		throw_rays_threads(t_rtv *rtv);
 
-int			close_win(void);
+int			close_win(t_rtv *rtv);
 int			key_hook(int keycode, t_rtv *rtv);
 
 void		*error_perror_null(const char *str);
@@ -210,5 +230,7 @@ t_vector	get_object_normal(t_point *p, t_object *obj);
 int			get_res_color(t_color color, float intense);
 float		reflection(t_point *p, t_vector *n, t_vector v, int obj, t_rtv *rtv);
 int			rgb(t_color color);
+
+void		destroy_and_exit(t_rtv *rtv);
 
 #endif

@@ -12,16 +12,17 @@
 
 #include "rtv.h"
 
-int		close_win(void)
+int		close_win(t_rtv *rtv)
 {
-	exit(0);
+	destroy_and_exit(rtv);
+	return (0);
 }
 
 int		key_hook(int keycode, t_rtv *rtv)
 {
 	if (keycode == 53)
 	{
-		exit(0);
+		destroy_and_exit(rtv);
 	}
 	if (keycode == 126)
 	{
@@ -31,7 +32,7 @@ int		key_hook(int keycode, t_rtv *rtv)
 		rtv->cam_pos.y -= 0.2;
 		rtv->cam_pos.z += 0.2;
 
-		throw_rays(rtv);
+		throw_rays_threads(rtv);
 		mlx_put_image_to_window(rtv->mlx[0], rtv->mlx[1], rtv->mlx[2], 20, 20);
 	}
 	if (keycode == 125)
@@ -42,7 +43,7 @@ int		key_hook(int keycode, t_rtv *rtv)
 		rtv->cam_pos.y += 0.2;
 		rtv->cam_pos.z -= 0.2;
 
-		throw_rays(rtv);
+		throw_rays_threads(rtv);
 		mlx_put_image_to_window(rtv->mlx[0], rtv->mlx[1], rtv->mlx[2], 20, 20);
 	}
 	if (keycode == 123)
@@ -53,7 +54,7 @@ int		key_hook(int keycode, t_rtv *rtv)
 		rtv->cam_pos.x -= 0.3;
 		rtv->cam_pos.z += 0.3;
 
-		throw_rays(rtv);
+		throw_rays_threads(rtv);
 		mlx_put_image_to_window(rtv->mlx[0], rtv->mlx[1], rtv->mlx[2], 20, 20);
 	}
 	if (keycode == 124)
@@ -64,7 +65,7 @@ int		key_hook(int keycode, t_rtv *rtv)
 		rtv->cam_pos.x += 0.3;
 		rtv->cam_pos.z -= 0.3;
 
-		throw_rays(rtv);
+		throw_rays_threads(rtv);
 		mlx_put_image_to_window(rtv->mlx[0], rtv->mlx[1], rtv->mlx[2], 20, 20);
 	}
 	return (0);

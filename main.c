@@ -28,16 +28,15 @@ int	main(int ac, char **av)
 			del_str_lst(&rtv.inplst);
 			return (-1);
 		}
-
-
-
 		if (graphic_window(&rtv) != 0)
+		{
+			scene_memory_free(&rtv);
+			del_str_lst(&rtv.inplst);
 			return (-1);
-		write(1, "-----------------------graphic_window---------------------", 60);
+		}
+		destroy_and_exit(&rtv);
 	}
 	else
-	{
 		usage_error(av[0]);
-	}
 	return (0);
 }

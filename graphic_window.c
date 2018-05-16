@@ -181,78 +181,125 @@ float	reflection(t_point *p, t_vector *n, t_vector v, int obj, t_rtv *rtv)
 	return (intens);
 }
 
-void	throw_rays(t_rtv *rtv)
+void	ray_processing(double x, double y, t_rtv *rtv, char *image)
 {
-	t_vector ray_dir;
-	int color;
+	t_vector	ray_dir;
+	int			color;
+
+	ray_dir = (t_vector){x, y, FRAME_DISTANCE};
+	ray_dir = rotate_cam_ray(rtv->cam_tri, &ray_dir);
+
+	if ((color = tracer(&ray_dir, rtv)) == -1)
+		color = rtv->bg_color;
+	ft_memcpy(image, &color, 4);
+}
+
+void	*throw_rays(void *arg)
+{
 	double y;
 	double x;
-
 	char *image;
-	image = rtv->img;
+	t_thread	*a;
 
-	y = (-rtv->frame_h + rtv->step) / 2.0;
-	x = (-(double)FRAME_WIDTH + rtv->step) / 2.0;
-
-	while(y < rtv->half_frame_h)
+	a = (t_thread*)arg;
+	image = a->image;
+	y = a->y_start;
+	x = a->rtv->x_start;
+	while(y < a->y_end)
 	{
-		while(x < rtv->half_frame_w)
+		while(x < a->rtv->half_frame_w)
 		{
-			ray_dir.x = x;
-			ray_dir.y = y;
-			ray_dir.z = FRAME_DISTANCE;
-
-			ray_dir = rotate_cam_ray(rtv->cam_tri, &ray_dir);
-
-			if ((color = tracer(&ray_dir, rtv)) == -1)
-				color = rtv->bg_color;
-
-			ft_memcpy(image, &color, 4);
-
-			x += rtv->step;
+			ray_processing(x, y, a->rtv, image);
+			x += a->rtv->step;
 			image += 4;
 		}
-		x = (-(double)FRAME_WIDTH + rtv->step) / 2.0;
-		y += rtv->step;
+		x = a->rtv->x_start;
+		y += a->rtv->step;
 	}
+	return (NULL);
+}
+
+void	throw_rays_threads(t_rtv *rtv)
+{
+	t_thread	args[THR_NUM];
+	pthread_t	thread[THR_NUM];
+	int			i;
+
+	i = 0;
+	while (i < THR_NUM)
+	{
+		args[i].rtv = rtv;
+		args[i].y_start = rtv->y_start + ((double)(i * rtv->lines_per_thr) * rtv->step);
+		args[i].y_end = rtv->y_start + ((double)((i + 1) * rtv->lines_per_thr) * rtv->step);
+		args[i].image = rtv->img + (i * rtv->lines_per_thr * IMG_WIDTH * 4);
+		if (pthread_create(&thread[i], NULL, throw_rays, &args[i]))
+		{
+			error_str_null("pthread_create() error");
+			destroy_and_exit(rtv);
+		}
+		i++;
+	}
+	i = 0;
+	while (i < THR_NUM)
+	{
+		if (pthread_join(thread[i], NULL))
+		{
+			error_str_null("pthread_join() error");
+			destroy_and_exit(rtv);
+		}
+		i++;
+	}
+}
+
+void	destroy_and_exit(t_rtv *rtv)
+{
+	mlx_destroy_image(rtv->mlx[0], rtv->mlx[2]);
+	mlx_destroy_window(rtv->mlx[0], rtv->mlx[1]);
+	scene_memory_free(rtv);
+	del_str_lst(&rtv->inplst);
+		// system("leaks RTv1");		//=============================
+	exit(0);
+}
+
+int		mlx_start(t_rtv *rtv)
+{
+	int		bits_per_pixel;
+	int		size_line;
+	int		endian;
+
+	bits_per_pixel = 4;							//	WTF ???
+	size_line = IMG_WIDTH * bits_per_pixel;		//	WTF ???
+	endian = 1;									//	WTF ???
+	if (!(rtv->mlx[0] = mlx_init()))
+	{
+		return (-1);
+	}
+	if (!(rtv->mlx[1] =
+					mlx_new_window(rtv->mlx[0], WIN_WIDTH, WIN_HEIGHT, "RTv1")))
+	{
+		return (-1);
+	}
+	if (!(rtv->mlx[2] = mlx_new_image(rtv->mlx[0], IMG_WIDTH, IMG_HEIGHT)))
+	{
+		mlx_destroy_window(rtv->mlx[0], rtv->mlx[1]);
+		return (-1);
+	}
+	rtv->img =
+		mlx_get_data_addr(rtv->mlx[2], &bits_per_pixel, &size_line, &endian);
+	return (0);
 }
 
 int		graphic_window(t_rtv *rtv)
 {
-	void	*mlx_arr[3];
-
-	if (!(mlx_arr[0] = mlx_init()))
-	{
+	if (mlx_start(rtv) != 0)
 		return (-1);
-	}
-	if (!(mlx_arr[1] = mlx_new_window(mlx_arr[0], WIN_WIDTH, WIN_HEIGHT, "some_name")))
-	{
-		return (-1);
-	}
-	if (!(mlx_arr[2] = mlx_new_image(mlx_arr[0], IMG_WIDTH, IMG_HEIGHT)))
-	{
-		return (-1);
-	}
-	rtv->mlx = mlx_arr;
-	
-	int		bits_per_pixel;
-	int		size_line;
-	int		endian;
-	bits_per_pixel = 4;							//	WTF ???
-	size_line = IMG_WIDTH * bits_per_pixel;		//	WTF ???
-	endian = 1;									//	WTF ???
-	rtv->img = mlx_get_data_addr(mlx_arr[2], &bits_per_pixel, &size_line, &endian);
+
+	throw_rays_threads(rtv);
+	mlx_put_image_to_window(rtv->mlx[0], rtv->mlx[1], rtv->mlx[2], 20, 20);
 
 
-
-	throw_rays(rtv);
-
-
-	mlx_put_image_to_window(mlx_arr[0], mlx_arr[1], mlx_arr[2], 20, 20);
-
-
-	mlx_hook(mlx_arr[1], 2, 5, key_hook, rtv);
-	mlx_hook(mlx_arr[1], 17, 1L << 17, close_win, NULL); //free
-	mlx_loop(mlx_arr[0]);
+	mlx_hook(rtv->mlx[1], 2, 5, key_hook, rtv);
+	mlx_hook(rtv->mlx[1], 17, 1L << 17, close_win, rtv);
+	mlx_loop(rtv->mlx[0]);
 	return (0);
 }
