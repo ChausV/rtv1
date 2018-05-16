@@ -20,6 +20,9 @@ int		close_win(t_rtv *rtv)
 
 int		key_hook(int keycode, t_rtv *rtv)
 {
+	double beta;
+	double g;
+
 	if (keycode == 53)
 	{
 		destroy_and_exit(rtv);
@@ -29,8 +32,17 @@ int		key_hook(int keycode, t_rtv *rtv)
 		rtv->cam_ang[0] -= 0.05;
 		rtv->cam_tri[0] = cos(rtv->cam_ang[0]);
 		rtv->cam_tri[1] = sin(rtv->cam_ang[0]);
-		rtv->cam_pos.y -= 0.2;
-		rtv->cam_pos.z += 0.2;
+
+		beta = (M_PI / 2.0) + (0.05 / 2.0) - atan2(rtv->cam_pos.z, rtv->cam_pos.y);
+		g = 2.0 * sin(0.05 / 2.0) * sqrt(rtv->cam_pos.z * rtv->cam_pos.z + rtv->cam_pos.y * rtv->cam_pos.z);
+		if (sin(rtv->cam_ang[0]) > 0)
+			rtv->cam_pos.y -= g * cos(beta);
+		else
+			rtv->cam_pos.y += g * cos(beta);
+		if (cos(rtv->cam_ang[0]) > 0)
+			rtv->cam_pos.z -= g * sin(beta);
+		else
+			rtv->cam_pos.z += g * sin(beta);
 
 		throw_rays_threads(rtv);
 		mlx_put_image_to_window(rtv->mlx[0], rtv->mlx[1], rtv->mlx[2], 20, 20);
@@ -40,8 +52,11 @@ int		key_hook(int keycode, t_rtv *rtv)
 		rtv->cam_ang[0] += 0.05;
 		rtv->cam_tri[0] = cos(rtv->cam_ang[0]);
 		rtv->cam_tri[1] = sin(rtv->cam_ang[0]);
-		rtv->cam_pos.y += 0.2;
-		rtv->cam_pos.z -= 0.2;
+
+		beta = (M_PI / 2.0) + (0.05 / 2.0) - atan2(rtv->cam_pos.y, rtv->cam_pos.z);
+		g = 2.0 * sin(0.05 / 2.0) * sqrt(rtv->cam_pos.z * rtv->cam_pos.z + rtv->cam_pos.y * rtv->cam_pos.z);
+		rtv->cam_pos.y -= g * sin(beta);
+		rtv->cam_pos.z += g * cos(beta);
 
 		throw_rays_threads(rtv);
 		mlx_put_image_to_window(rtv->mlx[0], rtv->mlx[1], rtv->mlx[2], 20, 20);
