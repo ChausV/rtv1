@@ -77,6 +77,29 @@ double	interCylinder(t_vector *ray, t_object *cylinder, t_point *pos)
 		return (10000000.0);
 }
 
+double	interCone(t_vector *ray, t_object *cone, t_point *pos)
+{
+	double sqtg;
+	double a;
+	double b;
+	double c;
+	double discr;
+	double t;
+
+	sqtg = tan(cone->r) * tan(cone->r);
+	a = ray->x * ray->x + ray->z * ray->z - sqtg * ray->y * ray->y;
+	b = 2 * (pos->x * ray->x + pos->z * ray->z - sqtg * pos->y * ray->y);
+	c = pos->x * pos->x + pos->z * pos->z - sqtg * pos->y * pos->y;
+	discr = b * b - (4 * a * c);
+	if (discr <= 0)
+		return (10000000.0);
+	t = (-b - sqrt(discr)) / (2 * a);
+	if (t > 0)
+		return (t);
+	else
+		return (10000000.0);
+}
+
 double	inters_distance(t_vector *ray, t_object *object, t_point *pos)
 {
 	if (object->type == 's')
@@ -85,6 +108,8 @@ double	inters_distance(t_vector *ray, t_object *object, t_point *pos)
 		return (interPlane(ray, object, pos));
 	else if (object->type == 'c')
 		return (interCylinder(ray, object, pos));
+	else if (object->type == 'k')
+		return (interCone(ray, object, pos));
 	else
 		return (10000000.0);
 }
@@ -97,6 +122,14 @@ t_vector	get_object_normal(t_point *p, t_object *object)
 		return (object->vect);
 	else if (object->type == 'c')
 		return (vector_from_points(p, &(t_point){0.0, p->y, 0.0}));
+	else if (object->type == 'k')
+	{
+		double d;
+		d = vector_length((t_vector*)p) / cos(object->r);
+		if (p->y < 0.0)
+			d = -d;
+		return (vector_from_points(p, &(t_point){0.0, d, 0.0}));
+	}
 	else
 		return ((t_vector){0.0, 0.0, 0.0});
 }

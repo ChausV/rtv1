@@ -72,7 +72,6 @@ int		parse_obj_cylinder(char *str, t_rtv *rtv, int *curr)
 	skip_space_symbols(str, &i);
 	if (parse_double(str, &i, &rtv->objects[*curr]->r) != 0 || rtv->objects[*curr]->r < 0.0)
 		return (error_str_int("scene error: cylinder radius error"));
-	skip_space_symbols(str, &i);
 
 	if (parse_color(str, &i, &rtv->objects[*curr]->color) != 0)
 		return (error_str_int("scene error: cylinder color error"));
@@ -80,6 +79,32 @@ int		parse_obj_cylinder(char *str, t_rtv *rtv, int *curr)
 		return (error_str_int("scene error: cylinder specularity error"));
 	if (str[i] != ';')
 		return (error_str_int("scene error: cylinder parse error"));
+
+	(*curr)++;
+	return (0);
+}
+
+int		parse_obj_cone(char *str, t_rtv *rtv, int *curr)
+{
+	int		i;
+
+	i = 0;
+	rtv->objects[*curr]->type = 'k';
+	skip_space_symbols(str, &i);
+	if (word_equ(&str[i], &i, "half_angle") != 0)
+		return (error_str_int("scene error: cone parse error"));
+	skip_space_symbols(str, &i);
+
+	if (parse_double(str, &i, &rtv->objects[*curr]->r) != 0 ||
+		rtv->objects[*curr]->r <= 0.0 || rtv->objects[*curr]->r >= (M_PI / 2.0))
+		return (error_str_int("scene error: cone angle error"));
+
+	if (parse_color(str, &i, &rtv->objects[*curr]->color) != 0)
+		return (error_str_int("scene error: cone color error"));
+	if (parse_specularity(str, &i, &rtv->objects[*curr]->specular) != 0)
+		return (error_str_int("scene error: cone specularity error"));
+	if (str[i] != ';')
+		return (error_str_int("scene error: cone parse error"));
 
 	(*curr)++;
 	return (0);
@@ -104,6 +129,10 @@ int		parse_object(t_rtv *rtv, char *str, int *curr)
 	else if (!word_equ(&str[i], &i, "cylinder"))
 	{
 		return (parse_obj_cylinder(&str[i], rtv, curr) ? -1 : 0);
+	}
+	else if (!word_equ(&str[i], &i, "cone"))
+	{
+		return (parse_obj_cone(&str[i], rtv, curr) ? -1 : 0);
 	}
 	else
 	{

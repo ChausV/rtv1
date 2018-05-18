@@ -31,7 +31,10 @@ object: cylinder
 	radius 2.0
 	color {10, 255, 10}
 	specularity 100;
-
+object: cone
+	half_angle 0.5
+	color {10, 10, 255}
+	specularity 100;
 
 
 
