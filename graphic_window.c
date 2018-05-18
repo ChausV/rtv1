@@ -33,7 +33,7 @@ double	interSpher(t_vector *ray_dir, t_object *sphere, t_point *p)
 	if (discrim <= 0)
 		return (10000000.0);
 	t1 = (-k[1] + sqrt(discrim)) / (2 * k[0]);
-	t2 = (-k[1] - sqrt(discrim)) / (2 * k[0]);
+	t2 = (-k[1] - sqrt(discrim)) / (2 * k[0]);	// t2 is always < t1
 	if (t1 < t2 && t1 > 0)
 		return (t1);
 	else if (t2 < t1 && t2 > 0)
@@ -56,12 +56,35 @@ double	interPlane(t_vector *ray_dir, t_object *plane, t_point *p)
 		return (10000000.0);
 }
 
+double	interCylinder(t_vector *ray, t_object *cylinder, t_point *pos)
+{
+	double a;
+	double b;
+	double c;
+	double discr;
+	double t;
+
+	a = ray->x * ray->x + ray->z * ray->z;
+	b = 2 * (pos->x * ray->x + pos->z * ray->z);
+	c = pos->x * pos->x + pos->z * pos->z - cylinder->r * cylinder->r;
+	discr = b * b - (4 * a * c);
+	if (discr <= 0)
+		return (10000000.0);
+	t = (-b - sqrt(discr)) / (2 * a);
+	if (t > 0)
+		return (t);
+	else
+		return (10000000.0);
+}
+
 double	inters_distance(t_vector *ray, t_object *object, t_point *pos)
 {
 	if (object->type == 's')
 		return (interSpher(ray, object, pos));
 	else if (object->type == 'p')
 		return (interPlane(ray, object, pos));
+	else if (object->type == 'c')
+		return (interCylinder(ray, object, pos));
 	else
 		return (10000000.0);
 }
@@ -72,8 +95,10 @@ t_vector	get_object_normal(t_point *p, t_object *object)
 		return (vector_from_points(p, &object->point));
 	else if (object->type == 'p')
 		return (object->vect);
+	else if (object->type == 'c')
+		return (vector_from_points(p, &(t_point){0.0, p->y, 0.0}));
 	else
-		return ((t_vector){0, 0, 0});
+		return ((t_vector){0.0, 0.0, 0.0});
 }
 
 int		get_res_color(t_color color, float intense)
