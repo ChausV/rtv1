@@ -72,7 +72,7 @@
 // # define FRAME_HEIGHT
 # define FRAME_DISTANCE 2.0
 
-# define THR_NUM 20
+# define THR_NUM 40
 
 typedef struct s_strlst	t_strlst;
 
@@ -118,6 +118,8 @@ struct	s_object
 	double		r;
 	t_color		color;
 	int			specular;
+	double		to_w[4][4];
+	double		to_o[4][4];
 };
 struct	s_light
 {
