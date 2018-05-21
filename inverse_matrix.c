@@ -12,31 +12,6 @@
 
 #include "rtv.h"
 
-
-
-// int		non_zero_pivot(double m[4][4])
-// {
-// 	int		i;
-// 	int		j;
-// 	double	max;
-
-// 	i = 0;
-// 	while(i < 4)
-// 	{
-// 		if (m[i][i] == 0.0)
-// 		{
-// 			j = 0;
-// 			max = 0.0;
-// 			while(j < 4)
-// 			{
-// 				if (fabs(m[j][i]) > )
-// 			}
-// 		}
-// 		i++;
-// 	}
-// 	return (0);
-// }
-
 int		is_zero_pivot(double m[4][4])
 {
 	int		i;
@@ -96,6 +71,66 @@ void	non_zero_pivot(double tmp[4][4], double to_o[4][4])
 	}
 }
 
+void	columns_to_zero_part(double tmp[4][4], double to_o[4][4], int i, int j)
+{
+	int		l;
+	double	k;
+
+	l = 0;
+	if ((k = tmp[j][i] / tmp[i][i]) != 0.0)
+	{
+		while (l < 4)
+		{
+			tmp[j][l] -= k * tmp[i][l];
+			to_o[j][l] -= k * to_o[i][l];
+			l++;
+		}
+		l = 0;
+		tmp[j][i] = 0.0;
+	}
+}
+
+void	columns_to_zero(double tmp[4][4], double to_o[4][4])
+{
+	int		i;
+	int		j;
+
+	i = 0;
+	j = 0;
+	while(i < 4)
+	{
+		while(j < 4)
+		{
+			if (i != j)
+			{
+				columns_to_zero_part(tmp, to_o, i, j);
+			}
+			j++;
+		}
+		j = 0;
+		i++;
+	}
+}
+
+void	pivots_to_one(double tmp[4][4], double to_o[4][4])
+{
+	int		i;
+	int		j;
+
+	i = 0;
+	j = 0;
+	while(i < 4)
+	{
+		while(j < 4)
+		{
+			to_o[i][j] /= tmp[i][i];
+			j++;
+		}
+		j = 0;
+		i++;
+	}
+}
+
 int		matrix_inverse(double to_o[4][4], double to_w[4][4])
 {
 	double	tmp[4][4];
@@ -104,14 +139,11 @@ int		matrix_inverse(double to_o[4][4], double to_w[4][4])
 		return (-1);
 	matr_copy(tmp, to_w);
 	non_zero_pivot(tmp, to_o);
+	columns_to_zero(tmp, to_o);
+	pivots_to_one(tmp, to_o);
 
 
 
-
-
-	put_matr(tmp);
-	ft_putendl("");
-	put_matr(to_o);
 	return (0);
 }
 

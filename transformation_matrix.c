@@ -130,6 +130,10 @@ void	matrix_create(t_vector *v, t_point *p, t_object *obj)
 	matr_ident_init(obj->to_o);
 	matrix_inverse(obj->to_o, obj->to_w);
 
+
+	put_matr(obj->to_w);
+	ft_putendl("");
+	put_matr(obj->to_o);
 }
 
 
