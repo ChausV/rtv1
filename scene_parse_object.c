@@ -80,6 +80,11 @@ int		parse_obj_cylinder(char *str, t_rtv *rtv, int *curr)
 	if (str[i] != ';')
 		return (error_str_int("scene error: cylinder parse error"));
 
+
+	matrix_create(&rtv->objects[*curr]->vect, &rtv->objects[*curr]->point,
+					rtv->objects[*curr]);
+
+
 	(*curr)++;
 	return (0);
 }

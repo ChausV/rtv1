@@ -27,6 +27,8 @@ SRC = main.c \
 	scene_parse_light.c \
 	scene_parse_object.c \
 	scene_parse_sphere.c \
+	transformation_matrix.c \
+	inverse_matrix.c \
 	graphic_window.c \
 	graphic_functions.c \
 	tracer_funcs.c \

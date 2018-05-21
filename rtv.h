@@ -193,6 +193,13 @@ int			parse_obj_sphere(char *str, t_rtv *rtv, int *curr);
 void		skip_space_symbols(char *str, int *iter);
 void		skip_nonspace_symbols(char *str, int *iter);
 
+void	create_to_world(t_vector *v, t_point *p, t_object *obj);
+void	matrix_create(t_vector *v, t_point *p, t_object *obj);
+void	matr_copy(double dest[4][4], double src[4][4]);
+void	put_matr(double matr[4][4]); //====================================
+double	matr_determ(double m[4][4]); //==============================
+int		matrix_inverse(double m[4][4], double w[4][4]);
+
 t_strlst	*new_str_lst_node();
 int			str_lst_append_node(t_strlst **list);
 void		del_str_lst(t_strlst **root);
@@ -221,6 +228,7 @@ void		vector_normalize(t_vector *v, t_vector *v_res);
 t_vector	vector_from_points(t_point *end, t_point *begin);
 t_vector	vector_sum(t_vector *v_1, t_vector *v_2, char sign);
 t_vector	vector_mult_scalar(t_vector *vect, double scalar);
+void		vector_cross_prod(t_vector *vect_1, t_vector *vect_2, t_vector *res);
 
 t_point		inters_point(t_point *orig, double t, t_vector *vect);
 t_vector 	rotate_cam_ray(double *trigon, t_vector *vect);
