@@ -199,6 +199,9 @@ void	matr_copy(double dest[4][4], double src[4][4]);
 void	put_matr(double matr[4][4]); //====================================
 double	matr_determ(double m[4][4]); //==============================
 int		matrix_inverse(double m[4][4], double w[4][4]);
+t_point		point_mult_matr(t_point *p, double m[4][4]);
+t_vector	vect_mult_matr(t_vector *v, double m[4][4]);
+t_vector	normal_mult_tr_matr(t_vector *v, double m[4][4]);
 
 t_strlst	*new_str_lst_node();
 int			str_lst_append_node(t_strlst **list);

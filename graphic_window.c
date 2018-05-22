@@ -64,9 +64,15 @@ double	interCylinder(t_vector *ray, t_object *cylinder, t_point *pos)
 	double discr;
 	double t;
 
-	a = ray->x * ray->x + ray->z * ray->z;
-	b = 2 * (pos->x * ray->x + pos->z * ray->z);
-	c = pos->x * pos->x + pos->z * pos->z - cylinder->r * cylinder->r;
+	t_point		op;
+	t_vector	or;
+
+	op = point_mult_matr(pos, cylinder->to_o);
+	or = vect_mult_matr(ray, cylinder->to_o);
+
+	a = or.x * or.x + or.z * or.z;
+	b = 2 * (op.x * or.x + op.z * or.z);
+	c = op.x * op.x + op.z * op.z - cylinder->r * cylinder->r;
 	discr = b * b - (4 * a * c);
 	if (discr <= 0)
 		return (10000000.0);
@@ -114,6 +120,18 @@ double	inters_distance(t_vector *ray, t_object *object, t_point *pos)
 		return (10000000.0);
 }
 
+t_vector	get_cylinder_normal(t_point *p, t_object *cylinder)
+{
+	t_point		op;
+	t_vector	on;
+	t_vector	res;
+
+	op = point_mult_matr(p, cylinder->to_o);
+	on = vector_from_points(&op, &(t_point){0.0, op.y, 0.0});
+	res = normal_mult_tr_matr(&on, cylinder->to_o);
+	return (res);
+}
+
 t_vector	get_object_normal(t_point *p, t_object *object)
 {
 	if (object->type == 's')
@@ -121,7 +139,7 @@ t_vector	get_object_normal(t_point *p, t_object *object)
 	else if (object->type == 'p')
 		return (object->vect);
 	else if (object->type == 'c')
-		return (vector_from_points(p, &(t_point){0.0, p->y, 0.0}));
+		return (get_cylinder_normal(p, object));
 	else if (object->type == 'k')
 	{
 		double d;

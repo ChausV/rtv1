@@ -91,10 +91,12 @@ void	matr_ident_init(double m[4][4])
 void	create_to_world(t_vector *v, t_point *p, t_object *obj)
 {
 	t_vector	tmp;
+	t_vector	tmp2;
 	t_vector	right;
 	t_vector	up;
 
-	tmp = (t_vector){0, 1, 0};
+	tmp = (t_vector){0.0, 1.0, 0.0};
+	tmp2 = (t_vector){1.0, 0.0, 0.0};
 
 	vector_normalize(&tmp, &tmp);
 	vector_normalize(v, v);

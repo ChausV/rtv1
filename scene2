@@ -7,8 +7,8 @@ camera:
 	position {0.0, 0.0, -40.0}
 	angles {0.0, 0.0, 0.0};
 
-shadow: on;
-glare: on;
+shadow: off;
+glare: off;
 #glare: ;
 #glare: on;
 #glare: on;
@@ -26,8 +26,8 @@ light: directional
 
 
 object: cylinder
-	point {2.0, 2.0, 2.0}
-	axis {1.0, -1.0, 0.0}
+	point {5.0, 5.0, 5.0}
+	axis {0.0, 0.0, 1.0}
 	radius 2.0
 	color {255, 10, 10}
 	specularity 100;
