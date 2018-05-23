@@ -85,6 +85,8 @@ double	interCylinder(t_vector *ray, t_object *cylinder, t_point *pos)
 
 double	interCone(t_vector *ray, t_object *cone, t_point *pos)
 {
+	// printf("___t_cone = \n");
+
 	double sqtg;
 	double a;
 	double b;
@@ -92,22 +94,35 @@ double	interCone(t_vector *ray, t_object *cone, t_point *pos)
 	double discr;
 	double t;
 
+	t_point		op;
+	t_vector	or;
+
+	op = point_mult_matr(pos, cone->to_o);
+	or = vect_mult_matr(ray, cone->to_o);
+
 	sqtg = tan(cone->r) * tan(cone->r);
-	a = ray->x * ray->x + ray->z * ray->z - sqtg * ray->y * ray->y;
-	b = 2 * (pos->x * ray->x + pos->z * ray->z - sqtg * pos->y * ray->y);
-	c = pos->x * pos->x + pos->z * pos->z - sqtg * pos->y * pos->y;
+	a = or.x * or.x + or.z * or.z - sqtg * or.y * or.y;
+	b = 2 * (op.x * or.x + op.z * or.z - sqtg * op.y * or.y);
+	c = op.x * op.x + op.z * op.z - sqtg * op.y * op.y;
 	discr = b * b - (4 * a * c);
 	if (discr <= 0)
+	{
+		// printf("___discr = %f\n", discr);
 		return (10000000.0);
+	}
 	t = (-b - sqrt(discr)) / (2 * a);
 	if (t > 0)
+	{
+		// printf("___t_cone = %f\n", t);
 		return (t);
+	}
 	else
 		return (10000000.0);
 }
 
 double	inters_distance(t_vector *ray, t_object *object, t_point *pos)
 {
+	// printf("___t_cone = \n");
 	if (object->type == 's')
 		return (interSpher(ray, object, pos));
 	else if (object->type == 'p')
@@ -132,6 +147,22 @@ t_vector	get_cylinder_normal(t_point *p, t_object *cylinder)
 	return (res);
 }
 
+t_vector	get_cone_normal(t_point *p, t_object *cone)
+{
+	t_point		op;
+	t_vector	on;
+	t_vector	res;
+	double		d;
+
+	op = point_mult_matr(p, cone->to_o);
+	d = vector_length((t_vector*)&op) / cos(cone->r);
+	if (op.y < 0.0)
+		d = -d;
+	on = vector_from_points(&op, &(t_point){0.0, d, 0.0});
+	res = normal_mult_tr_matr(&on, cone->to_o);
+	return (res);
+}
+
 t_vector	get_object_normal(t_point *p, t_object *object)
 {
 	if (object->type == 's')
@@ -141,13 +172,7 @@ t_vector	get_object_normal(t_point *p, t_object *object)
 	else if (object->type == 'c')
 		return (get_cylinder_normal(p, object));
 	else if (object->type == 'k')
-	{
-		double d;
-		d = vector_length((t_vector*)p) / cos(object->r);
-		if (p->y < 0.0)
-			d = -d;
-		return (vector_from_points(p, &(t_point){0.0, d, 0.0}));
-	}
+		return (get_cone_normal(p, object));
 	else
 		return ((t_vector){0.0, 0.0, 0.0});
 }

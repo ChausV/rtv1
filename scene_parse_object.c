@@ -64,7 +64,7 @@ int		parse_obj_cylinder(char *str, t_rtv *rtv, int *curr)
 		return (error_str_int("scene error: cylinder parse error"));
 	skip_space_symbols(str, &i);
 	if (parse_vector(&str[i], &i, &rtv->objects[*curr]->vect) != 0)
-		return (error_str_int("scene error: cylinder normal error"));
+		return (error_str_int("scene error: cylinder axis error"));
 
 	skip_space_symbols(str, &i);
 	if (word_equ(&str[i], &i, "radius"))
@@ -96,6 +96,22 @@ int		parse_obj_cone(char *str, t_rtv *rtv, int *curr)
 	i = 0;
 	rtv->objects[*curr]->type = 'k';
 	skip_space_symbols(str, &i);
+	if (word_equ(&str[i], &i, "point") != 0)
+		return (error_str_int("scene error: cone parse error"));
+	skip_space_symbols(str, &i);
+	if (parse_point(&str[i], &i, &rtv->objects[*curr]->point) != 0)
+		return (error_str_int("scene error: cone point error"));
+	skip_space_symbols(str, &i);
+	if (word_equ(&str[i], &i, "axis") != 0)
+		return (error_str_int("scene error: cone parse error"));
+	skip_space_symbols(str, &i);
+	if (parse_vector(&str[i], &i, &rtv->objects[*curr]->vect) != 0)
+		return (error_str_int("scene error: cone axis error"));
+
+
+
+
+	skip_space_symbols(str, &i);
 	if (word_equ(&str[i], &i, "half_angle") != 0)
 		return (error_str_int("scene error: cone parse error"));
 	skip_space_symbols(str, &i);
@@ -110,6 +126,11 @@ int		parse_obj_cone(char *str, t_rtv *rtv, int *curr)
 		return (error_str_int("scene error: cone specularity error"));
 	if (str[i] != ';')
 		return (error_str_int("scene error: cone parse error"));
+
+
+	matrix_create(&rtv->objects[*curr]->vect, &rtv->objects[*curr]->point,
+					rtv->objects[*curr]);
+
 
 	(*curr)++;
 	return (0);

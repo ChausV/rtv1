@@ -53,9 +53,13 @@ void	non_zero_pivot(double tmp[4][4], double to_o[4][4])
 
 	while((zero_i = is_zero_pivot(tmp)) != -1)
 	{
+		// put_matr(tmp);
+		// ft_putendl("");
+		// put_matr(to_o);
+		// ft_putendl("");
 		i = 0;
 		max = 0.0;
-		while(i < 4)
+		while(i < 3)
 		{
 			if (fabs(tmp[i][zero_i]) > max)
 			{

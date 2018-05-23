@@ -91,16 +91,13 @@ void	matr_ident_init(double m[4][4])
 void	create_to_world(t_vector *v, t_point *p, t_object *obj)
 {
 	t_vector	tmp;
-	t_vector	tmp2;
 	t_vector	right;
 	t_vector	up;
 
-	tmp = (t_vector){0.0, 1.0, 0.0};
-	tmp2 = (t_vector){1.0, 0.0, 0.0};
-
-	vector_normalize(&tmp, &tmp);
 	vector_normalize(v, v);
-	// if (v = {0, 1, 0} || {0, -1, 0})
+	tmp = (t_vector){0.0, 1.0, 0.0};
+	if (fabs(vector_dot_prod(v, &tmp)) > 0.95)
+		tmp = (t_vector){1.0, 0.0, 0.0};
 	vector_cross_prod(&tmp, v, &right);
 	vector_normalize(&right, &right);
 	vector_cross_prod(v, &right, &up);
@@ -111,13 +108,13 @@ void	create_to_world(t_vector *v, t_point *p, t_object *obj)
 	obj->to_w[0][1] = right.y;
 	obj->to_w[0][2] = right.z;
 	obj->to_w[0][3] = 0.0;
-	obj->to_w[1][0] = up.x;
-	obj->to_w[1][1] = up.y;
-	obj->to_w[1][2] = up.z;
+	obj->to_w[1][0] = v->x;
+	obj->to_w[1][1] = v->y;
+	obj->to_w[1][2] = v->z;
 	obj->to_w[1][3] = 0.0;
-	obj->to_w[2][0] = v->x;
-	obj->to_w[2][1] = v->y;
-	obj->to_w[2][2] = v->z;
+	obj->to_w[2][0] = up.x;
+	obj->to_w[2][1] = up.y;
+	obj->to_w[2][2] = up.z;
 	obj->to_w[2][3] = 0.0;
 	obj->to_w[3][0] = p->x;
 	obj->to_w[3][1] = p->y;
@@ -133,9 +130,9 @@ void	matrix_create(t_vector *v, t_point *p, t_object *obj)
 	matrix_inverse(obj->to_o, obj->to_w);
 
 
-	put_matr(obj->to_w);
-	ft_putendl("");
-	put_matr(obj->to_o);
+	// put_matr(obj->to_w);
+	// ft_putendl("");
+	// put_matr(obj->to_o);
 }
 
 
