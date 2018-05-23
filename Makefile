@@ -19,21 +19,26 @@ SRC = main.c \
 	scene_get_scene.c \
 	scene_str_lst_functions.c \
 	scene_parse.c \
+	scene_count_and_validation.c \
 	scene_obj_memory.c \
 	scene_parse_elements.c \
+	scene_parse_glare_shadow.c \
 	scene_parse_camera.c \
-	scene_parse_point.c \
+	scene_parse_point_other.c \
 	scene_parse_color.c \
 	scene_parse_light.c \
 	scene_parse_object.c \
 	scene_parse_sphere.c \
-	transformation_matrix.c \
-	transformation_functions.c \
-	inverse_matrix.c \
+	scene_parse_cylinder_cone.c \
+	matrix_transformation_create.c \
+	matrix_inverse.c \
+	matrix_inverse_part.c \
+	matrix_transformation_functions.c \
 	graphic_window.c \
-	graphic_functions.c \
+	graphic_draw_line.c \
+	graphic_hook_functions.c \
 	tracer_funcs.c \
-	draw_line.c \
+	tracer_intersections.c \
 	vector_funcs.c
 OBJ = $(SRC:.c=.o)
 HEADER = rtv.h

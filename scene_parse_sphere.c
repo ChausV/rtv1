@@ -12,7 +12,7 @@
 
 #include "rtv.h"
 
-int		parse_specularity(char *str, int *i, int *specul)
+int			parse_specularity(char *str, int *i, int *specul)
 {
 	skip_space_symbols(str, i);
 	if (word_equ(&str[*i], i, "specularity"))
@@ -24,19 +24,19 @@ int		parse_specularity(char *str, int *i, int *specul)
 	return (0);
 }
 
-int		parse_sphere_radius(char *str, int *i, double *radius)
+static int	parse_sphere_radius(char *str, int *i, double *radius)
 {
 	skip_space_symbols(str, i);
 	if (word_equ(&str[*i], i, "radius"))
 		return (error_str_int("scene error: sphere parse error"));
 	skip_space_symbols(str, i);
-	if (parse_double(str, i, radius) != 0 || *radius < 0.0)
+	if (parse_double(str, i, radius) != 0 || *radius <= 0.0)
 		return (error_str_int("scene error: sphere radius error"));
 	skip_space_symbols(str, i);
 	return (0);
 }
 
-int		parse_obj_sphere(char *str, t_rtv *rtv, int *curr)
+int			parse_obj_sphere(char *str, t_rtv *rtv, int *curr)
 {
 	int		i;
 

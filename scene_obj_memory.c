@@ -32,7 +32,7 @@ void	scene_memory_free(t_rtv *rtv)
 	}
 }
 
-int		objects_memory_init(t_rtv *rtv)
+static int	objects_memory_init(t_rtv *rtv)
 {
 	int		i;
 
@@ -50,7 +50,7 @@ int		objects_memory_init(t_rtv *rtv)
 	return (0);
 }
 
-int		lights_memory_init(t_rtv *rtv)
+static int	lights_memory_init(t_rtv *rtv)
 {
 	int		i;
 

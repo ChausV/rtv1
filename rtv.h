@@ -171,58 +171,74 @@ struct		s_thread
 	char	*image;
 };
 
-void		rtv_init(t_rtv *rtv);
-int			get_scene(char *file, t_rtv *rtv);
-int			scene_parse(t_rtv *rtv);
-int			scene_memory_alloc(t_rtv *rtv);
-void		scene_memory_free(t_rtv *rtv);
-int			scene_parse_elems(t_rtv *rtv);
-int			word_equ(char *str, int *i, char *word);
-int			parse_double(char *str, int *i, double *res);
-int			parse_integer(char *str, int *i, int *target);
-int			parse_camera(t_rtv *rtv, char *str);
-int			parse_point(char *str, int *i, t_point *point);
-int			parse_vector(char *str, int *i, t_vector *vector);
-int			parse_angles(char *str, int *i, double *angles);
-int			parse_color(char *str, int *i, t_color *target);
-int			parse_specularity(char *str, int *i, int *specul);
-int			parse_light(t_rtv *rtv, char *str, int *curr);
-int			parse_object(t_rtv *rtv, char *str, int *curr);
-int			parse_obj_sphere(char *str, t_rtv *rtv, int *curr);
-
-void		skip_space_symbols(char *str, int *iter);
-void		skip_nonspace_symbols(char *str, int *iter);
-
-void	create_to_world(t_vector *v, t_point *p, t_object *obj);
-void	matrix_create(t_vector *v, t_point *p, t_object *obj);
-void	matr_copy(double dest[4][4], double src[4][4]);
-void	put_matr(double matr[4][4]); //====================================
-double	matr_determ(double m[4][4]); //==============================
-int		matrix_inverse(double m[4][4], double w[4][4]);
-t_point		point_mult_matr(t_point *p, double m[4][4]);
-t_vector	vect_mult_matr(t_vector *v, double m[4][4]);
-t_vector	normal_mult_tr_matr(t_vector *v, double m[4][4]);
-
-t_strlst	*new_str_lst_node();
-int			str_lst_append_node(t_strlst **list);
-void		del_str_lst(t_strlst **root);
-
-int			graphic_window();
-
-int			tracer(t_vector *ray_dir, t_rtv *rtv);
-void		*throw_rays(void *arg);
-void		throw_rays_threads(t_rtv *rtv);
-
-int			close_win(t_rtv *rtv);
-int			key_hook(int keycode, t_rtv *rtv);
-
 void		*error_perror_null(const char *str);
 int			error_perror_int(const char *str);
 void		*error_str_null(const char *str);
 int			error_str_int(const char *str);
 void		usage_error(const char *name);
 
+void		rtv_init(t_rtv *rtv);
+int			get_scene(char *file, t_rtv *rtv);
+int			scene_parse(t_rtv *rtv);
+int			scene_count_and_validation(t_rtv *rtv);
+void		get_first_word(char *str, char **word);
+
+t_strlst	*new_str_lst_node();
+int			str_lst_append_node(t_strlst **list);
+void		del_str_lst(t_strlst **root);
+
+int			scene_memory_alloc(t_rtv *rtv);
+void		scene_memory_free(t_rtv *rtv);
+
+int			scene_parse_elems(t_rtv *rtv);
+void		skip_space_symbols(char *str, int *iter);
+void		skip_nonspace_symbols(char *str, int *iter);
+int			word_equ(char *str, int *i, char *word);
+int			parse_integer(char *str, int *i, int *target);
+int			parse_double(char *str, int *i, double *res);
+int			parse_point(char *str, int *i, t_point *point);
+int			parse_vector(char *str, int *i, t_vector *vector);
+int			parse_angles(char *str, int *i, double *angles);
+int			parse_color(char *str, int *i, t_color *target);
+int			parse_specularity(char *str, int *i, int *specul);
+
+int			parse_glare(t_rtv *rtv, char *str);
+int			parse_shadow(t_rtv *rtv, char *str);
+int			parse_camera(t_rtv *rtv, char *str);
+int			parse_light(t_rtv *rtv, char *str, int *curr);
+int			parse_object(t_rtv *rtv, char *str, int *curr);
+int			parse_obj_sphere(char *str, t_rtv *rtv, int *curr);
+int			parse_obj_cylinder(char *str, t_rtv *rtv, int *curr);
+int			parse_obj_cone(char *str, t_rtv *rtv, int *curr);
+
+int			matrix_create(t_vector *v, t_point *p, t_object *obj);
+void		matr_copy(double dest[4][4], double src[4][4]);
+double		matr_determinant(double m[4][4]);
+int			matrix_inverse(double m[4][4], double w[4][4]);
+void		columns_to_zero(double tmp[4][4], double to_o[4][4]);
+t_point		point_mult_matr(t_point *p, double m[4][4]);
+t_vector	vect_mult_matr(t_vector *v, double m[4][4]);
+t_vector	normal_mult_tr_matr(t_vector *v, double m[4][4]);
+
+
+
+//void	set_camera_trigonometry(t_rtv *rtv);	//??????????????????????
+
+
+
+int			graphic_window();
 void		draw_line(float *p0, float *p1, int color, void **mlx);
+int			close_win(t_rtv *rtv);
+int			key_hook(int keycode, t_rtv *rtv);
+void		destroy_and_exit(t_rtv *rtv);
+
+double		inters_distance(t_vector *ray, t_object *object, t_point *pos);
+
+
+
+int			tracer(t_vector *ray_dir, t_rtv *rtv);
+void		*throw_rays(void *arg);
+void		throw_rays_threads(t_rtv *rtv);
 
 double		vector_dot_prod(t_vector *vect_1, t_vector *vect_2);
 double		vector_dot_point(t_vector *vect, t_point *p);
@@ -236,14 +252,11 @@ void		vector_cross_prod(t_vector *vect_1, t_vector *vect_2, t_vector *res);
 t_point		inters_point(t_point *orig, double t, t_vector *vect);
 t_vector 	rotate_cam_ray(double *trigon, t_vector *vect);
 
-double		inters_distance(t_vector *ray, t_object *object, t_point *pos);
-double		interSpher(t_vector *ray_dir, t_object *sphere, t_point *p);
+
 int			intersect_shadow(t_point *p, t_vector *l, double min, double max, t_rtv *rtv);
 t_vector	get_object_normal(t_point *p, t_object *obj);
 int			get_res_color(t_color color, float intense);
 float		reflection(t_point *p, t_vector *n, t_vector v, int obj, t_rtv *rtv);
 int			rgb(t_color color);
-
-void		destroy_and_exit(t_rtv *rtv);
 
 #endif

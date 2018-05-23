@@ -79,8 +79,7 @@ t_vector	vector_sum(t_vector *v_1, t_vector *v_2, char sign)
 	}
 	else
 	{
-		// return NULL;
-		// make smth with it;
+		ft_putendl_fd("vector_sum() warning: bad 'sign' argument", 2);
 		res.x = 0;
 		res.y = 0;
 		res.z = 0;
@@ -106,8 +105,7 @@ t_vector	vector_sum_point(t_vector *v_1, t_vector *v_2, char sign)
 	}
 	else
 	{
-		// return NULL;
-		// make smth with it;
+		ft_putendl_fd("vector_sum_point() warning: bad 'sign' argument", 2);
 		res.x = 0;
 		res.y = 0;
 		res.z = 0;
@@ -124,10 +122,3 @@ t_vector	vector_mult_scalar(t_vector *vect, double scalar)
 	res.z = vect->z * scalar;
 	return res;
 }
-
-
-
-
-
-
-

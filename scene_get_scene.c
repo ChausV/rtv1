@@ -12,7 +12,7 @@
 
 #include "rtv.h"
 
-int			join_line_in_lst(char **str, char *line)
+static int	join_line_in_lst(char **str, char *line)
 {
 	char	*tmp;
 
@@ -28,7 +28,7 @@ int			join_line_in_lst(char **str, char *line)
 	return (0);
 }
 
-int			str_to_input_list(char *line, t_rtv *rtv)
+static int	str_to_input_list(char *line, t_rtv *rtv)
 {
 	if (rtv->inplst == NULL)
 	{

@@ -12,7 +12,7 @@
 
 #include "rtv.h"
 
-int		parse_light_intens(char *str, int *i, float *intens)
+static int	parse_light_intens(char *str, int *i, float *intens)
 {
 	double	res;
 
@@ -34,7 +34,7 @@ int		parse_light_intens(char *str, int *i, float *intens)
 	return (0);
 }
 
-int		parse_light_ambient(char *str, t_rtv *rtv, int *curr)
+static int	parse_light_ambient(char *str, t_rtv *rtv, int *curr)
 {
 	int		i;
 
@@ -43,12 +43,11 @@ int		parse_light_ambient(char *str, t_rtv *rtv, int *curr)
 		return (-1);
 	if (str[i] != ';')
 		return (error_str_int("scene error: light parse error"));
-	// printf("__%f__\n", rtv->lights[*curr]->intens);			//===========
 	(*curr)++;
 	return (0);
 }
 
-int		parse_light_point(char *str, t_rtv *rtv, int *curr)
+static int	parse_light_point(char *str, t_rtv *rtv, int *curr)
 {
 	int		i;
 
@@ -67,7 +66,7 @@ int		parse_light_point(char *str, t_rtv *rtv, int *curr)
 	return (0);
 }
 
-int		parse_light_directional(char *str, t_rtv *rtv, int *curr)
+static int	parse_light_directional(char *str, t_rtv *rtv, int *curr)
 {
 	int		i;
 
@@ -86,7 +85,7 @@ int		parse_light_directional(char *str, t_rtv *rtv, int *curr)
 	return (0);
 }
 
-int		parse_light(t_rtv *rtv, char *str, int *curr)
+int			parse_light(t_rtv *rtv, char *str, int *curr)
 {
 	int		i;
 

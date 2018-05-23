@@ -12,7 +12,7 @@
 
 #include "rtv.h"
 
-int		parse_integer(char *str, int *i, int *target)
+int			parse_integer(char *str, int *i, int *target)
 {
 	int		sign;
 	int		res;
@@ -37,7 +37,7 @@ int		parse_integer(char *str, int *i, int *target)
 	return (0);
 }
 
-int		parse_color_integer(char *str, int *i, int *target)
+static int	parse_color_integer(char *str, int *i, int *target)
 {
 	skip_space_symbols(str, i);
 	if (parse_integer(str, i, target) != 0 || *target < 0 || *target > 255)
@@ -46,7 +46,7 @@ int		parse_color_integer(char *str, int *i, int *target)
 	return (0);
 }
 
-int		parse_color(char *str, int *i, t_color *target)
+int			parse_color(char *str, int *i, t_color *target)
 {
 	skip_space_symbols(str, i);
 	if (word_equ(&str[*i], i, "color"))

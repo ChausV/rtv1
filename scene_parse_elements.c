@@ -12,73 +12,20 @@
 
 #include "rtv.h"
 
-void	skip_space_symbols(char *str, int *iter)
+void		skip_space_symbols(char *str, int *iter)
 {
 	while (ft_isspace(str[*iter]))
 		(*iter)++;
 }
 
-void	skip_nonspace_symbols(char *str, int *iter)
+void		skip_nonspace_symbols(char *str, int *iter)
 {
 	while (!ft_isspace(str[*iter]))
 		(*iter)++;
 }
 
-int		parse_glare(t_rtv *rtv, char *str)
-{
-	char	buff[SHORT_WORD_LENGTH];
-	int		i;
-	int		j;
-
-	i = 0;
-	j = 0;
-	skip_space_symbols(str, &i);
-	skip_nonspace_symbols(str, &i);
-	skip_space_symbols(str, &i);
-	while (!ft_isspace(str[i]) && str[i] != ';' && j < SHORT_WORD_LENGTH - 1)
-		buff[j++] = str[i++];
-	buff[j] = '\0';
-	// ft_putendl(buff);	//=========================
-	skip_space_symbols(str, &i);
-	if (str[i] != ';')
-		return (error_str_int("scene error: glare parse error"));
-	if (ft_strequ(buff, "on"))
-		rtv->glare = 1;
-	else if (ft_strequ(buff, "off"))
-		rtv->glare = 0;
-	else
-		return (error_str_int("scene error: glare parse error"));
-	return (0);
-}
-
-int		parse_shadow(t_rtv *rtv, char *str)
-{
-	char	buff[SHORT_WORD_LENGTH];
-	int		i;
-	int		j;
-
-	i = 0;
-	j = 0;
-	skip_space_symbols(str, &i);
-	skip_nonspace_symbols(str, &i);
-	skip_space_symbols(str, &i);
-	while (!ft_isspace(str[i]) && str[i] != ';' && j < SHORT_WORD_LENGTH - 1)
-		buff[j++] = str[i++];
-	buff[j] = '\0';
-	// ft_putendl(buff);	//=========================
-	skip_space_symbols(str, &i);
-	if (str[i] != ';')
-		return (error_str_int("scene error: shadow parse error"));
-	if (ft_strequ(buff, "on"))
-		rtv->shadow = 1;
-	else if (ft_strequ(buff, "off"))
-		rtv->shadow = 0;
-	else
-		return (error_str_int("scene error: shadow parse error"));
-	return (0);
-}
-
-int		scene_parse_el_diff(t_rtv *rtv, t_strlst *elem, int *l_curr, int *o_curr)
+static int	scene_parse_el_diff(t_rtv *rtv, t_strlst *elem, int *l_curr,
+																	int *o_curr)
 {
 	if (elem->type == 'o')
 	{
@@ -103,7 +50,7 @@ int		scene_parse_el_diff(t_rtv *rtv, t_strlst *elem, int *l_curr, int *o_curr)
 	return (0);
 }
 
-int		scene_parse_elems(t_rtv *rtv)
+int			scene_parse_elems(t_rtv *rtv)
 {
 	t_strlst	*iter;
 	int			light_curr;
