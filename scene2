@@ -6,6 +6,9 @@
 camera:
 	position {0.0, 0.0, -40.0}
 	angles {0.0, 0.0, 0.0};
+#camera:
+	position {0.0, 0.0, -40.0}
+	angles {0.2, 0.2, 0.2};
 
 shadow: on;
 glare: on;
@@ -24,32 +27,115 @@ light: directional
 	intensivity 0.2
 	direction {1.0, 1.0, 1.0};
 
+# next objects are axises;
 object: cylinder
 	point {0.0, 0.0, 0.0}
 	axis {1.0, 0.0, 0.0}
 	radius 0.05
 	color {255, 30, 30}
 	specularity -1;
+object: sphere
+	center {1.0, 0.0, 0.0}
+	radius 0.15
+	color {0, 0, 0}
+	specularity -1;
+#object: sphere
+	center {2.0, 0.0, 0.0}
+	radius 0.15
+	color {0, 0, 0}
+	specularity -1;
+#object: sphere
+	center {3.0, 0.0, 0.0}
+	radius 0.15
+	color {0, 0, 0}
+	specularity -1;
+#object: sphere
+	center {4.0, 0.0, 0.0}
+	radius 0.15
+	color {0, 0, 0}
+	specularity -1;
+#object: sphere
+	center {5.0, 0.0, 0.0}
+	radius 0.15
+	color {0, 0, 0}
+	specularity -1;
+
 object: cylinder
 	point {0.0, 0.0, 0.0}
 	axis {0.000000000001, 1.0, 0.0}
 	radius 0.05
 	color {30, 255, 30}
 	specularity -1;
+object: sphere
+	center {0.0, 1.0, 0.0}
+	radius 0.15
+	color {0, 0, 0}
+	specularity -1;
+#object: sphere
+	center {0.0, 2.0, 0.0}
+	radius 0.15
+	color {0, 0, 0}
+	specularity -1;
+#object: sphere
+	center {0.0, 3.0, 0.0}
+	radius 0.15
+	color {0, 0, 0}
+	specularity -1;
+#object: sphere
+	center {0.0, 4.0, 0.0}
+	radius 0.15
+	color {0, 0, 0}
+	specularity -1;
+#object: sphere
+	center {0.0, 5.0, 0.0}
+	radius 0.15
+	color {0, 0, 0}
+	specularity -1;
+
 object: cylinder
 	point {0.0, 0.0, 0.0}
 	axis {0.0, 0.0, 1.0}
 	radius 0.05
 	color {30, 30, 255}
 	specularity -1;
+object: sphere
+	center {0.0, 0.0, 1.0}
+	radius 0.15
+	color {0, 0, 0}
+	specularity -1;
+#object: sphere
+	center {0.0, 0.0, 2.0}
+	radius 0.15
+	color {0, 0, 0}
+	specularity -1;
+#object: sphere
+	center {0.0, 0.0, 3.0}
+	radius 0.15
+	color {0, 0, 0}
+	specularity -1;
+#object: sphere
+	center {0.0, 0.0, 4.0}
+	radius 0.15
+	color {0, 0, 0}
+	specularity -1;
+#object: sphere
+	center {0.0, 0.0, 5.0}
+	radius 0.15
+	color {0, 0, 0}
+	specularity -1;
 
-# endless cycle
-#object: cylinder
+
+# endless cycle - fixed
+# object: cylinder
 	point {5.0, 0.0, 0.0}
 	axis {0.1, -1.0, -0.3}
 	radius 2.0
 	color {255, 10, 10}
 	specularity 100;
+
+
+
+
 
 
 object: cylinder

@@ -18,7 +18,7 @@ static void	plane_norm_and_d(t_object *plane)
 	plane->r = -vector_dot_point(&plane->vect, &plane->point);
 }
 
-int		parse_obj_plane(char *str, t_rtv *rtv, int *curr)
+int			parse_obj_plane(char *str, t_rtv *rtv, int *curr)
 {
 	int		i;
 
@@ -47,7 +47,7 @@ int		parse_obj_plane(char *str, t_rtv *rtv, int *curr)
 	return (0);
 }
 
-int		parse_object(t_rtv *rtv, char *str, int *curr)
+int			parse_object(t_rtv *rtv, char *str, int *curr)
 {
 	int		i;
 

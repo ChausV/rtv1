@@ -63,14 +63,16 @@
 # define FIRST_WORD_LENGTH 15
 # define SHORT_WORD_LENGTH 10
 
-# define WIN_WIDTH 900
-# define WIN_HEIGHT 700
+# define MAX_OBJECTS_NUMBER 1000
 
+# define CADRE 13
 # define IMG_WIDTH 800
 # define IMG_HEIGHT 600
 # define FRAME_WIDTH 2.0
-// # define FRAME_HEIGHT
 # define FRAME_DISTANCE 2.0
+
+# define NO_INTERSEC_DIST 10000000.0
+# define INTERS_DIST_INIT 1000000.0
 
 # define THR_NUM 40
 
@@ -84,33 +86,34 @@ typedef struct s_light	t_light;
 
 typedef struct s_rtv	t_rtv;
 typedef struct s_thread	t_thread;
+typedef struct s_intens	t_intens;
 
-struct	s_strlst
+struct		s_strlst
 {
 	char		*str;
 	char		type;
 	t_strlst	*next;
 };
 
-struct	s_point
+struct		s_point
 {
 	double	x;
 	double	y;
 	double	z;
 };
-struct	s_vector
+struct		s_vector
 {
 	double	x;
 	double	y;
 	double	z;
 };
-struct	s_color
+struct		s_color
 {
 	int	r;
 	int	g;
 	int	b;
 };
-struct	s_object
+struct		s_object
 {
 	char		type;
 	t_point		point;
@@ -121,7 +124,7 @@ struct	s_object
 	double		to_w[4][4];
 	double		to_o[4][4];
 };
-struct	s_light
+struct		s_light
 {
 	char		type;
 	float		intens;
@@ -129,7 +132,7 @@ struct	s_light
 	t_vector	direction;
 };
 
-struct	s_rtv
+struct		s_rtv
 {
 	t_strlst	*inplst;
 	int			num_obj;
@@ -169,6 +172,16 @@ struct		s_thread
 	double	y_start;
 	double	y_end;
 	char	*image;
+};
+struct		s_intens
+{
+	t_point		*p;
+	t_object	*obj;
+	t_vector	*n;
+	t_rtv		*rtv;
+	t_vector	ray;
+	float		intens;
+	int			i;
 };
 
 void		*error_perror_null(const char *str);
@@ -220,25 +233,23 @@ t_point		point_mult_matr(t_point *p, double m[4][4]);
 t_vector	vect_mult_matr(t_vector *v, double m[4][4]);
 t_vector	normal_mult_tr_matr(t_vector *v, double m[4][4]);
 
-
-
-//void	set_camera_trigonometry(t_rtv *rtv);	//??????????????????????
-
-
-
 int			graphic_window();
 void		draw_line(float *p0, float *p1, int color, void **mlx);
 int			close_win(t_rtv *rtv);
 int			key_hook(int keycode, t_rtv *rtv);
 void		destroy_and_exit(t_rtv *rtv);
 
-double		inters_distance(t_vector *ray, t_object *object, t_point *pos);
-
-
-
-int			tracer(t_vector *ray_dir, t_rtv *rtv);
-void		*throw_rays(void *arg);
 void		throw_rays_threads(t_rtv *rtv);
+void		*throw_rays(void *arg);
+int			tracer(t_vector *ray_dir, t_rtv *rtv);
+int			res_color_calc(t_rtv *rtv, double t_min, t_vector *ray_dir, int o);
+
+double		inters_distance(t_vector *ray, t_object *object, t_point *pos);
+t_vector	get_object_normal(t_point *p, t_object *obj);
+float		res_intensity(t_intens *params);
+
+void		draw_frame(void **mlx, int color);
+int			rgb(t_color color);
 
 double		vector_dot_prod(t_vector *vect_1, t_vector *vect_2);
 double		vector_dot_point(t_vector *vect, t_point *p);
@@ -247,16 +258,12 @@ void		vector_normalize(t_vector *v, t_vector *v_res);
 t_vector	vector_from_points(t_point *end, t_point *begin);
 t_vector	vector_sum(t_vector *v_1, t_vector *v_2, char sign);
 t_vector	vector_mult_scalar(t_vector *vect, double scalar);
-void		vector_cross_prod(t_vector *vect_1, t_vector *vect_2, t_vector *res);
+void		vector_cross_prod(t_vector *vect_1, t_vector *vect_2, t_vector *r);
 
-t_point		inters_point(t_point *orig, double t, t_vector *vect);
-t_vector 	rotate_cam_ray(double *trigon, t_vector *vect);
-
-
-int			intersect_shadow(t_point *p, t_vector *l, double min, double max, t_rtv *rtv);
-t_vector	get_object_normal(t_point *p, t_object *obj);
-int			get_res_color(t_color color, float intense);
-float		reflection(t_point *p, t_vector *n, t_vector v, int obj, t_rtv *rtv);
-int			rgb(t_color color);
+void		rot_up(t_rtv *rtv);
+void		rot_down(t_rtv *rtv);
+void		rot_right(t_rtv *rtv);
+void		rot_left(t_rtv *rtv);
+t_vector	rotate_cam_ray(double *trigon, t_vector *vect);
 
 #endif

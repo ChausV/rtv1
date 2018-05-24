@@ -39,9 +39,9 @@ void		columns_to_zero(double tmp[4][4], double to_o[4][4])
 
 	i = 0;
 	j = 0;
-	while(i < 4)
+	while (i < 4)
 	{
-		while(j < 4)
+		while (j < 4)
 		{
 			if (i != j)
 			{

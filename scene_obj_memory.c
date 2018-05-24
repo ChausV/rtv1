@@ -12,7 +12,7 @@
 
 #include "rtv.h"
 
-void	scene_memory_free(t_rtv *rtv)
+void		scene_memory_free(t_rtv *rtv)
 {
 	int		i;
 
@@ -44,7 +44,6 @@ static int	objects_memory_init(t_rtv *rtv)
 			scene_memory_free(rtv);
 			return (error_perror_int("ft_memalloc() error"));
 		}
-		//	attributes initialiization;
 		i++;
 	}
 	return (0);
@@ -62,13 +61,12 @@ static int	lights_memory_init(t_rtv *rtv)
 			scene_memory_free(rtv);
 			return (error_perror_int("ft_memalloc() error"));
 		}
-		//	attributes initialiization;
 		i++;
 	}
 	return (0);
 }
 
-int		scene_memory_alloc(t_rtv *rtv)
+int			scene_memory_alloc(t_rtv *rtv)
 {
 	int		i;
 

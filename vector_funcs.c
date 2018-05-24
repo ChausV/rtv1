@@ -25,7 +25,7 @@ void	vector_normalize(t_vector *v, t_vector *v_res)
 
 	sq_len = v->x * v->x + v->y * v->y + v->z * v->z;
 	if (sq_len > 0)
-	{	
+	{
 		inv_len = 1.0 / sqrt(sq_len);
 		v_res->x = v->x * inv_len;
 		v_res->y = v->y * inv_len;
@@ -49,76 +49,4 @@ void	vector_cross_prod(t_vector *vect_1, t_vector *vect_2, t_vector *res)
 	res->x = vect_1->y * vect_2->z - vect_1->z * vect_2->y;
 	res->y = vect_1->z * vect_2->x - vect_1->x * vect_2->z;
 	res->z = vect_1->x * vect_2->y - vect_1->y * vect_2->x;
-}
-
-t_vector	vector_from_points(t_point *end, t_point *begin)
-{
-	t_vector	res;
-
-	res.x = end->x - begin->x;
-	res.y = end->y - begin->y;
-	res.z = end->z - begin->z;
-	return res;
-}
-
-t_vector	vector_sum(t_vector *v_1, t_vector *v_2, char sign)
-{
-	t_vector	res;
-
-	if (sign == '+')
-	{
-		res.x = v_1->x + v_2->x;
-		res.y = v_1->y + v_2->y;
-		res.z = v_1->z + v_2->z;
-	}
-	else if (sign == '-')
-	{
-		res.x = v_1->x - v_2->x;
-		res.y = v_1->y - v_2->y;
-		res.z = v_1->z - v_2->z;
-	}
-	else
-	{
-		ft_putendl_fd("vector_sum() warning: bad 'sign' argument", 2);
-		res.x = 0;
-		res.y = 0;
-		res.z = 0;
-	}
-	return res;
-}
-
-t_vector	vector_sum_point(t_vector *v_1, t_vector *v_2, char sign)
-{
-	t_vector	res;
-
-	if (sign == '+')
-	{
-		res.x = v_1->x + v_2->x;
-		res.y = v_1->y + v_2->y;
-		res.z = v_1->z + v_2->z;
-	}
-	else if (sign == '-')
-	{
-		res.x = v_1->x - v_2->x;
-		res.y = v_1->y - v_2->y;
-		res.z = v_1->z - v_2->z;
-	}
-	else
-	{
-		ft_putendl_fd("vector_sum_point() warning: bad 'sign' argument", 2);
-		res.x = 0;
-		res.y = 0;
-		res.z = 0;
-	}
-	return res;
-}
-
-t_vector	vector_mult_scalar(t_vector *vect, double scalar)
-{
-	t_vector	res;
-
-	res.x = vect->x * scalar;
-	res.y = vect->y * scalar;
-	res.z = vect->z * scalar;
-	return res;
 }

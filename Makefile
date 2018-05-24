@@ -35,11 +35,17 @@ SRC = main.c \
 	matrix_inverse_part.c \
 	matrix_transformation_functions.c \
 	graphic_window.c \
+	graphic_window_frame.c \
 	graphic_draw_line.c \
 	graphic_hook_functions.c \
-	tracer_funcs.c \
+	graphic_hook_rotation.c \
+	tracer_throw_rays.c \
 	tracer_intersections.c \
-	vector_funcs.c
+	tracer_color.c \
+	tracer_light_intensivity.c \
+	tracer_normals.c \
+	vector_funcs.c \
+	vector_funcss.c
 OBJ = $(SRC:.c=.o)
 HEADER = rtv.h
 

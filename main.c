@@ -14,10 +14,10 @@
 
 int	main(int ac, char **av)
 {
+	t_rtv	rtv;
+
 	if (ac == 2)
 	{
-		t_rtv	rtv;
-
 		rtv_init(&rtv);
 		if (get_scene(av[1], &rtv) != 0)
 		{

@@ -12,24 +12,6 @@
 
 #include "rtv.h"
 
-// void	put_matr(double matr[4][4])
-// {
-// 	int	i = 0;
-// 	int	j = 0;
-
-// 	while(i < 4)
-// 	{
-// 		while(j < 4)
-// 		{
-// 			printf("%13f", matr[i][j]);
-// 			j++;
-// 		}
-// 		printf("\n");
-// 		j = 0;
-// 		i++;
-// 	}
-// }
-
 double		matr_determinant(double m[4][4])
 {
 	double	det;
@@ -50,9 +32,9 @@ void		matr_copy(double dest[4][4], double src[4][4])
 
 	i = 0;
 	j = 0;
-	while(i < 4)
+	while (i < 4)
 	{
-		while(j < 4)
+		while (j < 4)
 		{
 			dest[i][j] = src[i][j];
 			j++;
@@ -69,9 +51,9 @@ static void	matr_ident_init(double m[4][4])
 
 	i = 0;
 	j = 0;
-	while(i < 4)
+	while (i < 4)
 	{
-		while(j < 4)
+		while (j < 4)
 		{
 			m[i][j] = 0.0;
 			j++;
@@ -80,7 +62,7 @@ static void	matr_ident_init(double m[4][4])
 		i++;
 	}
 	j = 0;
-	while(j < 4)
+	while (j < 4)
 	{
 		m[j][j] = 1.0;
 		j++;
@@ -100,7 +82,6 @@ static void	create_to_world(t_vector *v, t_object *obj)
 	vector_normalize(&right, &right);
 	vector_cross_prod(v, &right, &up);
 	vector_normalize(&up, &up);
-
 	obj->to_w[0][0] = right.x;
 	obj->to_w[0][1] = right.y;
 	obj->to_w[0][2] = right.z;

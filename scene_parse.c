@@ -12,7 +12,7 @@
 
 #include "rtv.h"
 
-void	get_first_word(char *str, char **word)
+void		get_first_word(char *str, char **word)
 {
 	int		i;
 	int		j;
@@ -34,6 +34,8 @@ static int	scene_num_elems_validation(t_rtv *rtv)
 {
 	if (rtv->num_obj <= 0)
 		return (error_str_int("scene error: no object(s)"));
+	if (rtv->num_obj >= MAX_OBJECTS_NUMBER)
+		return (error_str_int("scene error: too many objects"));
 	if (rtv->num_lig <= 0)
 		return (error_str_int("scene error: no light(s)"));
 	if (rtv->num_cam != 1)
@@ -58,7 +60,7 @@ static void	overall_light_intensivity_verification(t_light **lights, int num)
 		error_str_int("scene warning: overall lights intensivity warning");
 }
 
-int		scene_parse(t_rtv *rtv)
+int			scene_parse(t_rtv *rtv)
 {
 	if (scene_count_and_validation(rtv) != 0)
 		return (-1);

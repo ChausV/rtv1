@@ -12,253 +12,46 @@
 
 #include "rtv.h"
 
-int		rgb(t_color color)
+t_vector	rotate_cam_ray(double *trigon, t_vector *vect)
 {
-	return (color.r << 16 | color.g << 8 | color.b);
-}
-
-t_vector	get_cylinder_normal(t_point *p, t_object *cylinder)
-{
-	t_point		op;
-	t_vector	on;
 	t_vector	res;
+	double		tmp_x;
+	double		tmp_y;
+	double		tmp_z;
 
-	op = point_mult_matr(p, cylinder->to_o);
-	on = vector_from_points(&op, &(t_point){0.0, op.y, 0.0});
-	res = normal_mult_tr_matr(&on, cylinder->to_o);
+	tmp_y = trigon[0] * vect->y - trigon[1] * vect->z;
+	tmp_z = trigon[1] * vect->y + trigon[0] * vect->z;
+	tmp_x = trigon[2] * vect->x + trigon[3] * tmp_z;
+	res.z = -trigon[3] * vect->x + trigon[2] * tmp_z;
+	res.x = trigon[4] * tmp_x - trigon[5] * tmp_y;
+	res.y = trigon[5] * tmp_x + trigon[4] * tmp_y;
 	return (res);
 }
 
-t_vector	get_cone_normal(t_point *p, t_object *cone)
-{
-	t_point		op;
-	t_vector	on;
-	t_vector	res;
-	double		d;
-
-	op = point_mult_matr(p, cone->to_o);
-	d = vector_length((t_vector*)&op) / cos(cone->r);
-	if (op.y < 0.0)
-		d = -d;
-	on = vector_from_points(&op, &(t_point){0.0, d, 0.0});
-	res = normal_mult_tr_matr(&on, cone->to_o);
-	return (res);
-}
-
-t_vector	get_object_normal(t_point *p, t_object *object)
-{
-	if (object->type == 's')
-		return (vector_from_points(p, &object->point));
-	else if (object->type == 'p')
-		return (object->vect);
-	else if (object->type == 'c')
-		return (get_cylinder_normal(p, object));
-	else if (object->type == 'k')
-		return (get_cone_normal(p, object));
-	else
-		return ((t_vector){0.0, 0.0, 0.0});
-}
-
-int		get_res_color(t_color color, float intense)
-{
-	int	res_color;
-
-	res_color = rgb((t_color){(int)color.r * intense,
-								(int)color.g * intense,
-								(int)color.b * intense});
-	return (res_color);
-}
-
-int		intersect_shadow(t_point *p, t_vector *l, double min, double max, t_rtv *rtv)
-{
-	int i = 0;
-	double	inter;
-
-	while (i < rtv->num_obj)
-	{
-		inter = inters_distance(l, rtv->objects[i], p);
-		if (inter != 10000000.0 && inter <= max && inter >= min)
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-float	reflection(t_point *p, t_vector *n, t_vector v, int obj, t_rtv *rtv)
-{
-	float intens = 0.0F;
-	int i;
-	double n_dot_l;
-	double r_dot_v;
-	t_vector l;
-	t_vector r;
-
-	i = 0;
-	while(i < rtv->num_lig)
-	{
-		if (rtv->lights[i]->type == 'a')
-		{
-			intens += rtv->lights[i]->intens;
-		}
-		else
-		{
-			if (rtv->lights[i]->type == 'd')
-			{
-				l = vector_mult_scalar(&rtv->lights[i]->direction, -1);  ///----inverse (look at this later)
-				// l = rtv->lights[i]->direction;
-				if (rtv->shadow)
-				{
-					if (intersect_shadow(p, &l, 0.0000001, 10000000.0, rtv) == 1)
-					{
-						i++;
-						continue;
-					}
-				}
-			}
-			else if (rtv->lights[i]->type == 'p')
-			{
-				l = vector_from_points(&rtv->lights[i]->position, p);
-				if (rtv->shadow)
-				{
-					if (intersect_shadow(p, &l, 0.0000001, 1.0, rtv) == 1)
-					{
-						i++;
-						continue;
-					}
-				}
-			}
-
-
-			n_dot_l = vector_dot_prod(n, &l);
-			if (rtv->objects[obj]->type == 'p' && n_dot_l < 0)
-				n_dot_l = -n_dot_l;
-			if (n_dot_l > 0 )
-			{
-				intens += rtv->lights[i]->intens * (float)(n_dot_l / (vector_length(n) *
-															vector_length(&l)));
-			}
-
-
-
-			if (rtv->objects[obj]->specular != -1 && rtv->glare)		// check again
-			{
-				r = vector_mult_scalar(n, 2 * vector_dot_prod(n, &l));
-				r = vector_sum(&r, &l, '-');
-				r_dot_v = vector_dot_prod(&r, &v);
-				if (r_dot_v > 0)
-				{
-					intens += rtv->lights[i]->intens * (float)pow(r_dot_v / (vector_length(&r) *
-												vector_length(&v)), rtv->objects[obj]->specular);
-				}
-			}
-
-
-		}
-		i++;
-	}
-	if (intens > 1)
-	{
-		// printf("___%f___", intens);
-		intens = 1;
-	}
-	return (intens);
-}
-
-void	ray_processing(double x, double y, t_rtv *rtv, char *image)
-{
-	t_vector	ray_dir;
-	int			color;
-
-	ray_dir = (t_vector){x, y, FRAME_DISTANCE};
-	ray_dir = rotate_cam_ray(rtv->cam_tri, &ray_dir);
-
-	if ((color = tracer(&ray_dir, rtv)) == -1)
-		color = rtv->bg_color;
-	ft_memcpy(image, &color, 4);
-}
-
-void	*throw_rays(void *arg)
-{
-	double y;
-	double x;
-	char *image;
-	t_thread	*a;
-
-	a = (t_thread*)arg;
-	image = a->image;
-	y = a->y_start;
-	x = a->rtv->x_start;
-	while(y < a->y_end)
-	{
-		while(x < a->rtv->half_frame_w)
-		{
-			ray_processing(x, y, a->rtv, image);
-			x += a->rtv->step;
-			image += 4;
-		}
-		x = a->rtv->x_start;
-		y += a->rtv->step;
-	}
-	return (NULL);
-}
-
-void	throw_rays_threads(t_rtv *rtv)
-{
-	t_thread	args[THR_NUM];
-	pthread_t	thread[THR_NUM];
-	int			i;
-
-	i = 0;
-	while (i < THR_NUM)
-	{
-		args[i].rtv = rtv;
-		args[i].y_start = rtv->y_start + ((double)(i * rtv->lines_per_thr) * rtv->step);
-		args[i].y_end = rtv->y_start + ((double)((i + 1) * rtv->lines_per_thr) * rtv->step);
-		args[i].image = rtv->img + (i * rtv->lines_per_thr * IMG_WIDTH * 4);
-		if (pthread_create(&thread[i], NULL, throw_rays, &args[i]))
-		{
-			error_str_null("pthread_create() error");
-			destroy_and_exit(rtv);
-		}
-		i++;
-	}
-	i = 0;
-	while (i < THR_NUM)
-	{
-		if (pthread_join(thread[i], NULL))
-		{
-			error_str_null("pthread_join() error");
-			destroy_and_exit(rtv);
-		}
-		i++;
-	}
-}
-
-void	destroy_and_exit(t_rtv *rtv)
+void		destroy_and_exit(t_rtv *rtv)
 {
 	mlx_destroy_image(rtv->mlx[0], rtv->mlx[2]);
 	mlx_destroy_window(rtv->mlx[0], rtv->mlx[1]);
 	scene_memory_free(rtv);
 	del_str_lst(&rtv->inplst);
-		// system("leaks RTv1");		//=============================
 	exit(0);
 }
 
-int		mlx_start(t_rtv *rtv)
+int			mlx_start(t_rtv *rtv)
 {
 	int		bits_per_pixel;
 	int		size_line;
 	int		endian;
 
-	bits_per_pixel = 4;							//	WTF ???
-	size_line = IMG_WIDTH * bits_per_pixel;		//	WTF ???
-	endian = 1;									//	WTF ???
+	bits_per_pixel = 4;
+	size_line = IMG_WIDTH * bits_per_pixel;
+	endian = 1;
 	if (!(rtv->mlx[0] = mlx_init()))
 	{
 		return (-1);
 	}
-	if (!(rtv->mlx[1] =
-					mlx_new_window(rtv->mlx[0], WIN_WIDTH, WIN_HEIGHT, "RTv1")))
+	if (!(rtv->mlx[1] = mlx_new_window(rtv->mlx[0], IMG_WIDTH + 2 * CADRE + 3,
+										IMG_HEIGHT + 2 * CADRE + 3, "RTv1")))
 	{
 		return (-1);
 	}
@@ -272,15 +65,16 @@ int		mlx_start(t_rtv *rtv)
 	return (0);
 }
 
-int		graphic_window(t_rtv *rtv)
+int			graphic_window(t_rtv *rtv)
 {
 	if (mlx_start(rtv) != 0)
+	{
 		return (-1);
-
+	}
+	draw_frame(rtv->mlx, 0xfffafa);
 	throw_rays_threads(rtv);
-	mlx_put_image_to_window(rtv->mlx[0], rtv->mlx[1], rtv->mlx[2], 20, 20);
-
-
+	mlx_put_image_to_window(rtv->mlx[0], rtv->mlx[1], rtv->mlx[2], CADRE + 1,
+																	CADRE + 2);
 	mlx_hook(rtv->mlx[1], 2, 5, key_hook, rtv);
 	mlx_hook(rtv->mlx[1], 17, 1L << 17, close_win, rtv);
 	mlx_loop(rtv->mlx[0]);
